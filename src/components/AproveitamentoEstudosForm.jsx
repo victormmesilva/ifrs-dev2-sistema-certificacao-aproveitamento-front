@@ -1,16 +1,9 @@
-import React/* , { useState } */ from 'react';
+import React from 'react';
+import TituloPagina from './TituloPagina';
 
-function AproveitamentoEstudosForm(){
-    /* const [curso, setCurso] = useState('');
-    const [discCursadaAntes, setDiscCursadaAntes] = useState('');
-    const [discSolicitada, setDiscSolicitada] = useState('');
-    const [anexo, setAnexo] = useState([]); */
-    
+function AproveitamentoEstudosForm(){     
     return(
-        <>
-            <h3 className="text-center m-3">Aproveitamento de Estudos</h3>
-           
-        </>
+        <TituloPagina titulo={'Aproveitamento de Estudos'}/>
     );
 }
 
