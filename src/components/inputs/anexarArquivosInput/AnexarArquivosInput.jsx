@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import Files from 'react-files';
-import './inputFiles.css';
+import './AnexarArquivosInput.css';
 
 function AnexarArquivosInput(props) {
     const { anexos, setAnexos } = props;

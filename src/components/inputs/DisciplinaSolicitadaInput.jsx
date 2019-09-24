@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 
-const defaultSelect = {label: '...', value: ''};
+const defaultSelect = {label: 'Selecione a disciplina que deseja aproveitar', value: ''};
 const disciplinasJSON = [
     {id: 1, nome: 'Banco de Dados'},
     {id: 2, nome: 'Desenvolvimento de Sistemas I'},

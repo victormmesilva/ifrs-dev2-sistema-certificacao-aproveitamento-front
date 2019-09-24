@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 
-const defaultSelect = {label: '...', value: ''};
+const defaultSelect = {label: 'Selecione o curso', value: ''};
 const cursosJSON = [
     {id: 1, nome: 'Análise e Desenvolvimento de Sistemas'},
     {id: 2, nome: 'Letras'},

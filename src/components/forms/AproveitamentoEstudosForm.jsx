@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Blob from 'blob'
-import AnexarArquivosInput from './AnexarArquivosInput';
-import DisciplinaSolicitadaInput from './DisciplinaSolicitadaInput';
-import DisciplinaCursadaAnteriorInput from './DisciplinaCursadaAnteriorInput';
-import CursoInput from './CursoInput';
-import TituloPagina from './TituloPagina';
-import ModalConfirmarRequisicao from './ModalConfirmarRequisicao';
+import React, { useState } from 'react';
+import TituloPagina from '../TituloPagina';
+import ModalConfirmarRequisicao from '../modal/ModalConfirmarRequisicao';
+import Blob from 'blob';
+import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
+import DisciplinaSolicitadaInput from '../inputs/DisciplinaSolicitadaInput';
+import DisciplinaCursadaAnteriorInput from '../inputs/DisciplinaCursadaAnteriorInput';
+import CursoInput from '../inputs/CursoInput';
 
-function CertificacaoConhecimentosForm(){
+function AproveitamentoEstudosForm(){     
     const [curso, setCurso] = useState('');
     const [discCursadaAntes, setDiscCursadaAntes] = useState('');
     const [discSolicitada, setDiscSolicitada] = useState('');
@@ -24,21 +24,26 @@ function CertificacaoConhecimentosForm(){
 
         const requisicao = {
             idAluno: 1,
-            curso: curso.value,
+            curso: curso,
             discCursadaAntes,
-            discSolicitada: discSolicitada.value,
+            discSolicitada: discSolicitada,
             anexos: formatarAnexos(),
         };
         setRequisicao(requisicao);
         setShowModal(true);
 
         console.log(requisicao);
-    }   
+    }
+
+    const limparCampos = (event) => {
+        event.preventDefault();        
+
+    }
 
     return(
         <>
-            <TituloPagina titulo={'Certificação de Conhecimentos'} />
-
+            <TituloPagina titulo={'Aproveitamento de Estudos'}/>
+            
             <CursoInput setCurso={setCurso}/>
 
             <DisciplinaSolicitadaInput 
@@ -50,17 +55,17 @@ function CertificacaoConhecimentosForm(){
             <DisciplinaCursadaAnteriorInput
                 setDiscCursadaAntes={setDiscCursadaAntes}
             />
-            
+
             <AnexarArquivosInput anexos={anexos} setAnexos={setAnexos}/>
-            
+
             <div className="d-flex justify-content-end">
-                <button type="reset" className="btn btn-link m-1">Limpar</button>
+                <button type="reset" className="btn btn-link m-1" onClick={limparCampos}>Cancelar</button>
                 <button className="btn btn-primary m-1" onClick={fazerRequisicao}>Enviar</button>
             </div>
 
-            {showModal && <ModalConfirmarRequisicao requisicao={requisicao}/>}
+            {showModal && <ModalConfirmarRequisicao requisicao={requisicao} setShowModal={setShowModal} showModal={showModal}/>}
         </>
     );
 }
 
-export default CertificacaoConhecimentosForm;
+export default AproveitamentoEstudosForm;

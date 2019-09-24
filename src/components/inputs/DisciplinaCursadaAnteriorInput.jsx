@@ -10,6 +10,7 @@ function DisciplinaCursadaAnteriorInput(props) {
                 type="text" 
                 className="form-control" 
                 id="disciplina-anterior" 
+                placeholder="Preencha com o nome da disciplina que você cursou em outra instituição"
                 onChange={({target}) => setDiscCursadaAntes(target.value)}
             />
         </div>

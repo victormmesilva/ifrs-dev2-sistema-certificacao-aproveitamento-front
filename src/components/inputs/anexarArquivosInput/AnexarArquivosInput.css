@@ -1,7 +1,8 @@
 .files-dropzone-list {
-    display: table-cell;
+    display: flex;
     vertical-align: middle;
-    text-align: center;
+    align-items: center;
+    justify-content: center;
     padding: 10px;
     border: 1px dashed #D3D3D3;
     cursor: pointer;
@@ -106,26 +107,3 @@
     margin-right: 10px;
     float: right;
   }
-  
-  
-  
-  /* GALLERY */
-  /* ================== */
-  
-  .files-dropzone-gallery {
-    padding: 10px;
-    border: 1px dashed #D3D3D3;
-    min-height: 300px;
-    width: 500px;
-  }
-  .files-gallery-item {
-    height: 80px;
-    margin: 5px;
-  }
-  
-  
-  .files-dropzone-active {
-    border: 1px solid lightgreen;
-    color: lightgreen;
-  }
-  

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import CertificacaoConhecimentosForm from '../components/CertificacaoConhecimentosForm';
-import AproveitamentoEstudosForm from '../components/AproveitamentoEstudosForm';
+import CertificacaoConhecimentosForm from '../components/forms/CertificacaoConhecimentosForm';
+import AproveitamentoEstudosForm from '../components/forms/AproveitamentoEstudosForm';
 
 const getFormulario = (tipo) => {
     switch(tipo){
@@ -30,7 +30,7 @@ function Requisicoes(){
                 </select>
             </div>
 
-            {tipoRequisicao && <form className="col-8 bg-light mx-auto rounded p-4">{getFormulario(tipoRequisicao)}</form> }
+            {tipoRequisicao && <form className="col-10 bg-light mx-auto rounded p-4">{getFormulario(tipoRequisicao)}</form> }
         </>
     );
 }   
