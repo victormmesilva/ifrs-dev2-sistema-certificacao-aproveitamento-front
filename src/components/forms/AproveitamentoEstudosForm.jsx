@@ -9,9 +9,18 @@ import CursoInput from '../inputs/CursoInput';
 
 function AproveitamentoEstudosForm(){     
     const [curso, setCurso] = useState('');
+    const [cursoInvalido, setCursoInvalido] = useState(false);
+
     const [discCursadaAntes, setDiscCursadaAntes] = useState('');
+    const [discCursadaAntesInvalida, setdiscCursadaAntesInvalida] = useState(false);
+
     const [discSolicitada, setDiscSolicitada] = useState('');
+    const [discSolicitadaInvalida, setdiscSolicitadaInvalida] = useState(false);
+
     const [anexos, setAnexos] = useState([]);
+    const [anexosInvalidos, setAnexosInvalidos] = useState(false);
+
+
     const [showModal, setShowModal] = useState(false);
     const [requisicao, setRequisicao] = useState(false);
 
@@ -20,19 +29,25 @@ function AproveitamentoEstudosForm(){
     });
     
     const fazerRequisicao = (event) => {
-        event.preventDefault();        
+        event.preventDefault();      
+        
+        if(!curso) setCursoInvalido(true);
+        if(!discCursadaAntes) setdiscCursadaAntesInvalida(true);
+        if(!discSolicitadaInvalida) setdiscSolicitadaInvalida(true);
+        if(!anexos) setAnexosInvalidos(true);
 
-        const requisicao = {
+        /* const requisicao = {
             idAluno: 1,
             curso: curso,
             discCursadaAntes,
             discSolicitada: discSolicitada,
             anexos: formatarAnexos(),
         };
+        
         setRequisicao(requisicao);
         setShowModal(true);
 
-        console.log(requisicao);
+        console.log(requisicao); */
     }
 
     const limparCampos = (event) => {
@@ -44,19 +59,25 @@ function AproveitamentoEstudosForm(){
         <>
             <TituloPagina titulo={'Aproveitamento de Estudos'}/>
             
-            <CursoInput setCurso={setCurso}/>
+            <CursoInput setCurso={setCurso} onError={cursoInvalido}/>
 
             <DisciplinaSolicitadaInput 
                 curso={curso}
                 setDiscSolicitada={setDiscSolicitada} 
                 disabled={!curso}
+                onError={discSolicitadaInvalida}
             />
 
             <DisciplinaCursadaAnteriorInput
                 setDiscCursadaAntes={setDiscCursadaAntes}
+                onError={discCursadaAntesInvalida}
             />
 
-            <AnexarArquivosInput anexos={anexos} setAnexos={setAnexos}/>
+            <AnexarArquivosInput 
+                anexos={anexos} 
+                setAnexos={setAnexos}
+                onError={anexosInvalidos}
+            />
 
             <div className="d-flex justify-content-end">
                 <button type="reset" className="btn btn-link m-1" onClick={limparCampos}>Cancelar</button>
