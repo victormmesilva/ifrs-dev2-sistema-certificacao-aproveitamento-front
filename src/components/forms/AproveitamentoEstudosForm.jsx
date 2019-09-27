@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import TituloPagina from '../TituloPagina';
-import ModalConfirmarRequisicao from '../modal/ModalConfirmarRequisicao';
+import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
 import Blob from 'blob';
 import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
 import DisciplinaSolicitadaInput from '../inputs/DisciplinaSolicitadaInput';

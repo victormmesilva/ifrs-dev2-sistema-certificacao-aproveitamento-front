@@ -1,10 +1,7 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import './ModalConfirmarRequisicao.css';
 
-const ModalConfirmarRequisicao = props => {
-    const { requisicao, enviarRequisicao, setShowModal, showModal} = props;
-
+export default function ModalConfirmarRequisicao({ requisicao, enviarRequisicao, setShowModal, showModal }){
     return (
         <>
             <Modal show={showModal}>
@@ -26,5 +23,3 @@ const ModalConfirmarRequisicao = props => {
         </>
     );
 }
-
-export default ModalConfirmarRequisicao;
