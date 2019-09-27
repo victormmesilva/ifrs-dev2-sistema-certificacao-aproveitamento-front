@@ -1,39 +1,46 @@
 import React, { useState } from 'react';
+import { Form } from 'react-bootstrap';
 import CertificacaoConhecimentosForm from '../components/forms/CertificacaoConhecimentosForm';
 import AproveitamentoEstudosForm from '../components/forms/AproveitamentoEstudosForm';
-import './Requisicoes.css';
+
+const CERTIFICACAO = 'CERTIFICACAO';
+const APROVEITAMENTO = 'APROVEITAMENTO';
 
 const getFormulario = (tipo) => {
     switch(tipo){
-        case 'CERTIFICACAO':
+        case CERTIFICACAO:
             return <CertificacaoConhecimentosForm />;
-        case 'APROVEITAMENTO':
+        case APROVEITAMENTO:
             return <AproveitamentoEstudosForm />;
         default:
             return null;
     }
 }
 
-function Requisicoes(){
+export default function Requisicoes(){
     const [tipoRequisicao, setTipoRequisicao] = useState('');
 
     return(
         <>
-            <div className="form-group mx-auto col-6 mb-4 mt-3">
-                <label htmlFor="select-requisicao" className="mb-1">Selecione o tipo de requisição</label>
-                <select id="select-requisicao"
-                        className="form-control" 
-                        onChange={({target}) => setTipoRequisicao(target.value)}
+            <Form.Group className="mx-auto col-6 mb-4 mt-3">
+                <Form.Label className="mb-1">
+                    Selecione o tipo de requisição
+                </Form.Label>
+                <Form.Control 
+                    as="select"
+                    onChange={({target}) => setTipoRequisicao(target.value)}
                 >
                     <option value=''>...</option>
-                    <option value='APROVEITAMENTO'>Aproveitamento de Estudos</option>
-                    <option value='CERTIFICACAO'>Certificação de Conhecimentos</option>
-                </select>
-            </div>
+                    <option value={APROVEITAMENTO}>Aproveitamento de Estudos</option>
+                    <option value={CERTIFICACAO}>Certificação de Conhecimentos</option>
+                </Form.Control>
+            </Form.Group>
 
-            {tipoRequisicao && <form className="col-10 bg-light mx-auto rounded p-4">{getFormulario(tipoRequisicao)}</form> }
+            {tipoRequisicao && 
+                <Form className="col-10 bg-light mx-auto rounded p-4">
+                    {getFormulario(tipoRequisicao)}
+                </Form> 
+            }
         </>
     );
-}   
-
-export default Requisicoes;
+}

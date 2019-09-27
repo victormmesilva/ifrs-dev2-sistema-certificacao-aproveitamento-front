@@ -1,10 +1,12 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Files from 'react-files';
 import './AnexarArquivosInput.css';
+import { Form, Button } from 'react-bootstrap';
 
-function AnexarArquivosInput(props) {
-    const { anexos, setAnexos } = props;
+export default function AnexarArquivosInput({ anexos, setAnexos, onError }) {
     const refAnexos = useRef();
+    
+    useEffect(() => refAnexos.current.setState({ files: anexos}), [anexos]);
 
     const onFilesChange = (files) => setAnexos(files);
     
@@ -22,7 +24,7 @@ function AnexarArquivosInput(props) {
 
     return (
         <>
-            <div className="form-group">
+            <Form.Group>
                 <Files
                     ref={refAnexos}
                     className='files-dropzone-list'
@@ -35,7 +37,7 @@ function AnexarArquivosInput(props) {
                     minFileSize={0}
                     clickable
                 >
-                    {'Clique ou solte aqui os arquivos para anexar'}
+                    Clique ou solte aqui os arquivos para anexar
                 </Files>
                 {
                     anexos.length > 0 ? 
@@ -66,18 +68,21 @@ function AnexarArquivosInput(props) {
                         </div>
                     : null
                 }
-            </div> 
-            
-            <div className="d-flex justify-content-start">
-                <button 
-                    className="btn btn-link m-1" 
+            </Form.Group> 
+            {onError && 
+                <Form.Text className="text-danger">
+                    O campo anexos é obrigatório
+                </Form.Text>
+            }
+            <Form.Group className="d-flex justify-content-start m-0 p-0">                
+                <Button
+                    variant="link" 
+                    className="m-0 p-0 border-0" 
                     onClick={removerTodosAnexos}
                 >
                     Remover todos os anexos
-                </button>
-            </div>
+                </Button>
+            </Form.Group>
         </>
     );
 }
-
-export default AnexarArquivosInput;

@@ -1,32 +1,28 @@
 import React from 'react';
+import { Modal, Button } from 'react-bootstrap';
 import './ModalConfirmarRequisicao.css';
 
 const ModalConfirmarRequisicao = props => {
-    const { requisicao, fazerRequisicao, setShowModal, showModal} = props;
-    const { curso, discSolicitada, discCursadaAntes } = requisicao;
+    const { requisicao, enviarRequisicao, setShowModal, showModal} = props;
 
     return (
         <>
-            <div className={`modal fade ${showModal && 'show'}`} id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Confirmar requisição?</h5>
-                        </div>
-                        <div className="modal-body">
-                            <>
-                                <p>{`Curso: ${curso.label}`}</p>
-                                <p>{`Disciplina que será aproveitada: ${discSolicitada.label}`}</p>
-                                <p>{`Disciplina cursada em outra instituição: ${discCursadaAntes}`}</p>
-                            </>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancelar</button>
-                            <button type="button" className="btn btn-primary">Confirmar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Modal show={showModal}>
+                <Modal.Header closeButton>
+                <Modal.Title>Confirmar requisição?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {JSON.stringify(requisicao)}
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={() => setShowModal(false)}>
+                    Cancelar
+                </Button>
+                <Button variant="primary" onClick={() => enviarRequisicao(requisicao) && setShowModal(false)}>
+                    Confirmar
+                </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Form } from 'react-bootstrap';
 import Select from 'react-select';
 
 const defaultSelect = {label: 'Selecione a disciplina que deseja aproveitar', value: ''};
@@ -8,31 +9,29 @@ const disciplinasJSON = [
     {id: 3, nome: 'Desenvolvimento de Sistemas II'},
 ];
 
-function DisciplinaSolicitadaInput(props) {
-    const { curso, disabled, setDiscSolicitada } = props;
-    const [disciplinas, setDisciplinas] = useState(disciplinasJSON);
+export default function DisciplinaSolicitadaInput({ disabled, setDiscSolicitada, onError, value }) {
+    const [disciplinas, setDisciplinas] = useState([]);
 
-    useEffect(() => {
-        if(curso === ''){
-            setDiscSolicitada('');
-        } else {
-            setDisciplinas(disciplinasJSON);
-        }    
-    }, [curso, setDiscSolicitada]);
+    useEffect(() => setDisciplinas(disciplinasJSON), []);
 
     return (
-        <div className="form-group">
-            <label htmlFor="disciplina-solicitada" className="mb-1">Disciplina solicitada</label>
+        <Form.Group>
+            <Form.Label className="mb-1">
+                Disciplina solicitada
+            </Form.Label>
             <Select
                 id="disciplina-solicitada"
                 onChange={(option) => setDiscSolicitada(option)}
                 selectedOption={null}
                 options={disciplinas.map(disciplina => ({ value: disciplina.id, label: disciplina.nome}))}
-                defaultValue={defaultSelect}
+                value={value || defaultSelect}
                 isDisabled={disabled}
             />
-        </div>
+            {onError && 
+                <Form.Text className="text-danger">
+                    O campo disciplina solicitada é obrigatório.
+                </Form.Text>
+            }
+        </Form.Group>
     );
 }
-
-export default DisciplinaSolicitadaInput;

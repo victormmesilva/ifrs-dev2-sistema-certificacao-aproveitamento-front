@@ -1,20 +1,22 @@
 import React from 'react';
+import { Form } from 'react-bootstrap';
 
-function DisciplinaCursadaAnteriorInput(props) {
-    const { setDiscCursadaAntes } = props;
-
+export default function DisciplinaCursadaAnteriorInput({ setDiscCursadaAntes, onError, value }) {
     return (
-        <div className="form-group">
-            <label htmlFor="disciplina-anterior" className="mb-1">Disciplina cursada anteriormente</label>
-            <input 
+        <Form.Group>
+            <Form.Label className="mb-1">Disciplina cursada anteriormente</Form.Label>
+            <Form.Control 
                 type="text" 
-                className="form-control" 
                 id="disciplina-anterior" 
                 placeholder="Preencha com o nome da disciplina que você cursou em outra instituição"
                 onChange={({target}) => setDiscCursadaAntes(target.value)}
+                value={value}
             />
-        </div>
+            {onError && 
+                <Form.Text className="text-danger">
+                    O campo disciplina anterior é obrigatório.
+                </Form.Text>
+            }
+        </Form.Group>
     );
 }
-
-export default DisciplinaCursadaAnteriorInput;
