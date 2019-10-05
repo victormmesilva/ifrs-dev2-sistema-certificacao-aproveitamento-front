@@ -30,14 +30,14 @@ function AproveitamentoEstudosForm(){
     
     const fazerRequisicao = (event) => {
         event.preventDefault();      
-        
+        debugger; 
         if(!curso) setCursoInvalido(true);
         if(!discCursadaAntes) setdiscCursadaAntesInvalida(true);
         if(!discSolicitadaInvalida) setdiscSolicitadaInvalida(true);
         if(!anexos) setAnexosInvalidos(true);
 
-        /* const requisicao = {
-            idAluno: 1,
+         const requisicao = {
+        //    idAluno: 1,
             curso: curso,
             discCursadaAntes,
             discSolicitada: discSolicitada,
@@ -46,15 +46,14 @@ function AproveitamentoEstudosForm(){
         
         setRequisicao(requisicao);
         setShowModal(true);
-
-        console.log(requisicao); */
+        console.log(requisicao); 
     }
 
     const limparCampos = (event) => {
         event.preventDefault();        
 
     }
-
+    
     return(
         <>
             <TituloPagina titulo={'Aproveitamento de Estudos'}/>
@@ -88,5 +87,4 @@ function AproveitamentoEstudosForm(){
         </>
     );
 }
-
 export default AproveitamentoEstudosForm;
