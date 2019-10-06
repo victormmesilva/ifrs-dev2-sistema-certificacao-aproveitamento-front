@@ -8,7 +8,6 @@ import DisciplinaCursadaAnteriorInput from '../inputs/DisciplinaCursadaAnteriorI
 import CursoInput from '../inputs/CursoInput';
 
 function AproveitamentoEstudosForm(){   
-    debugger;  
     const [curso, setCurso] = useState('');
     const [cursoInvalido, setCursoInvalido] = useState(false);
 
@@ -31,7 +30,6 @@ function AproveitamentoEstudosForm(){
     
     const fazerRequisicao = (event) => {
         event.preventDefault();      
-        debugger;
         if(!curso) setCursoInvalido(true);
         if(!discCursadaAntes) setdiscCursadaAntesInvalida(true);
         if(!discSolicitadaInvalida) setdiscSolicitadaInvalida(true);

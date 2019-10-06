@@ -20,15 +20,6 @@ export default class CursoInput extends Component {
         this.props.setCurso(option);
     }
 
-   /* setDisciplinas(option){
-        Axios.get(`${enviroment}/api/cursos/${option.id}/disciplinas`).then(response =>{
-            this.setState({
-                disciplinas: response.data
-            })
-        }).catch(error => console.log(error))
-     
-    }*/
-
     carregarTodosOsCursos(){
         Axios.get(`${enviroment}/api/cursos`).then(response=> {
             this.setState({

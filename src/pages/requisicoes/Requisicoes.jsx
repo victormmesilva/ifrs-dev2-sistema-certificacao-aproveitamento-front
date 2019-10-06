@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import CertificacaoConhecimentosForm from '../components/forms/CertificacaoConhecimentosForm';
-import AproveitamentoEstudosForm from '../components/forms/AproveitamentoEstudosForm';
+import CertificacaoConhecimentosForm from '../../components/forms/CertificacaoConhecimentosForm';
+import AproveitamentoEstudosForm from '../../components/forms/AproveitamentoEstudosForm';
 import './Requisicoes.css';
 
 const getFormulario = (tipo) => {

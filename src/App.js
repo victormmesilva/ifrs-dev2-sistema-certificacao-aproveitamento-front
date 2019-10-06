@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import Requisicoes from './pages/Requisicoes';
+import Requisicoes from './pages/requisicoes/Requisicoes';
 
 function App() {
   return (

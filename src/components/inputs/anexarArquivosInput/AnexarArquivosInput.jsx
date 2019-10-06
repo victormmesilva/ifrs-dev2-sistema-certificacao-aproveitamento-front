@@ -5,6 +5,7 @@ import Files from 'react-files';
 import './AnexarArquivosInput.css';
 
 function AnexarArquivosInput(props) {
+    debugger;
     const { anexos, setAnexos } = props;
     const refAnexos = useRef();
 
@@ -43,7 +44,7 @@ function AnexarArquivosInput(props) {
                     anexos.length > 0 ? 
                     <div className='files-list'>
                             <ul>
-                                {anexos.map((file) =>
+                                { anexos.map((file) =>
                                     <li className='files-list-item' key={file.id}>
                                         <div className='files-list-item-preview'>{
                                             file.preview.type === 'image' ? 

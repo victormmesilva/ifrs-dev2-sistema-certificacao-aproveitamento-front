@@ -6,6 +6,7 @@ import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInp
 import CursoInput from '../inputs/CursoInput';
 import Axios from 'axios';
 import { enviroment } from '../../enviroment';
+import { fileToBase64 } from '../../base64';
 
 export default class CertificacaoConhecimentosForm extends Component {
 
@@ -13,11 +14,16 @@ export default class CertificacaoConhecimentosForm extends Component {
         super(props);
         this.state = {
             curso: {},
-            disciplinas: [], 
-            formacaoAtividadeAnterior:""
+            disciplinas: [],
+            formacaoAtividadeAnterior: "",
+            anexos: [],
+            disciplina: {}
+            
 
         }
     }
+
+    limparCampos() { window.location.reload(); }
 
     setParam(param, valor) {
         this.setState({
@@ -28,46 +34,131 @@ export default class CertificacaoConhecimentosForm extends Component {
     setCurso(value) {
         this.setState({
             "curso": value,
-            "disciplinas": [{}]
+
         });
-        this.getDisciplinas(value)
+        this.getDisciplinas(value);
     }
 
     getDisciplinas(value) {
-        debugger;
         Axios.get(`${enviroment}/api/cursos/${value.value}/disciplinas`).then(response => {
-            debugger;
             this.setParam("disciplinas", response.data)
         })
     }
     cursoInvalido() {
-
-
     }
 
     setDiscSolicitada(value) {
-       
-        debugger;
-
+        this.setParam("disciplina", value);
     }
 
-    setFormacaoAtividadeAnterior(value){
-        debugger
-      
+    setDiscplinas(value) {
+        this.setParam("disciplinas", value);
     }
 
-    anexos(value){
-
+    validaFormacaoAtividadeAnterior(value) {
+        if (value.formacaoAtividadeAnterior == null || value.formacaoAtividadeAnterior == "") {
+            return { status: false, mensage: "Você não pode inserir a formação atividade anterior como um campo nulo ou vazio. " };
+        }
+        if (value.anexos == null || value.anexos == []) {
+            return { status: false, mensage: "Você não pode fazer a requisição sem fornecer os anexos.  " };
+        }
+        if (value.disciplinaSolicitada == null || value.disciplinaSolicitada == {}) {
+            return { status: false, mensage: "Você não pode fazer a requisição sem fornecer a disciplina.  " };
+        }
+        return {status:true, message:"OK"}
     }
 
-    setAnexos(){
+    anexosToString(value){
 
+        value.forEach(element=>{
+            fileToBase64(element)
+        })
+       // file name e file path/
+      //  
+       debugger
+        return value
+    }
+
+    getBase64(file, cb) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            cb(reader.result)
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }s
+
+    fazerRequisicao() {
+        debugger 
+        let requisicao = {
+            formacaoAtividadeAnterior: this.state.formacaoAtividadeAnterior,
+            tipo: "certificacao",
+            dataRequisicao: Date.now(),
+            anexos: this.state.anexos,
+            disciplinaSolicitada: {
+                id: this.state.disciplina.value,
+                nome: this.state.disciplina.label, 
+                cargaHorarioa: this.state.disciplina.carga, 
+
+            
+            }
+        }
+
+       let returnObject =  this.validaFormacaoAtividadeAnterior({
+            formacaoAtividadeAnterior: this.state.formacaoAtividadeAnterior,
+            tipo: "certificacao",
+            dataRequisicao: Date.now(),
+            anexos: this.state.anexos,
+            disciplinaSolicitada: {
+                id: this.state.disciplina.value,
+                nome: this.state.disciplina.label, 
+                cargaHorarioa: this.state.disciplina.carga, 
+            }
+    });
+       if(returnObject.status === false){
+
+       }else{
+
+
+        this.anexosToString(this.state.anexos)
+           Axios.post(`${enviroment}/api/requisicoes/`,{
+            formacaoAtividadeAnterior: this.state.formacaoAtividadeAnterior,
+            tipo: "certificacao",
+            dataRequisicao: Date.now(),
+            anexos: this.state.anexos,
+            disciplinaSolicitada: {
+                id: this.state.disciplina.value,
+                nome: this.state.disciplina.label, 
+                cargaHorarioa: this.state.disciplina.carga, 
+
+            
+            }
+        }).then(response=>{
+               debugger;
+               console.log("SALVOU A REQUISICAO COMO ESPERADO ===>", response); 
+           }).catch(error=> {console.log("ERRO====>>>" + error)
+                debugger 
+        }); 
+       } 
+    }
+
+    setDisciplinas(value) {
+        this.setParam("disciplinas", value)
+    }
+
+    setFormacaoAtividadeAnterior(value) {
+        this.setState({ "formacaoAtividadeAnterior": value })
+    }
+
+    setAnexos(anexos) {
+
+        this.setState({ "anexos": anexos })
     }
 
     render() {
-        /*
-        
-        */
+
         return (
             <>
                 <TituloPagina titulo={'Certificação de Conhecimentos'} />
@@ -76,19 +167,27 @@ export default class CertificacaoConhecimentosForm extends Component {
                 <DisciplinaSolicitadaInput
                     curso={this.state.curso}
                     disciplinas={this.state.disciplinas ? this.state.disciplinas : []}
-                    setDiscSolicitada={this.setDiscSolicitada}
+                    setDiscSolicitada={(value) => this.setDiscSolicitada(value)}
                     disabled={!this.state.curso}
                     onError={this.state.discSolicitadaInvalida}
                 />
 
                 <DisciplinaCursadaAnteriorInput
-                    setDiscCursadaAntes={this.setFormacaoAtividadeAnterior}
+                    setDiscCursadaAntes={(value) => this.setFormacaoAtividadeAnterior(value)}
                 />
-                 <AnexarArquivosInput
-                    anexos={this.anexos}
-                    setAnexos={this.setAnexos}
-                   // onError={anexosInvalidos}
+                <AnexarArquivosInput
+                    anexos={this.state.anexos}
+                    setAnexos={(anexos) => this.setAnexos(anexos)}
+                // onError={anexosInvalidos}
                 />
+
+                <div className="d-flex justify-content-end">
+                    <button type="reset" className="btn btn-link m-1" onClick={() => this.limparCampos()}>Cancelar</button>
+                    <button type="submit"className="btn btn-primary m-1" onClick={() => this.fazerRequisicao()}>Enviar</button>
+                </div>
+
+                {/*showModal && <ModalConfirmarRequisicao requisicao={requisicao} setShowModal={setShowModal} showModal={showModal} />*/}
+
 
 
             </>
