@@ -16,6 +16,7 @@ export default class CursoInput extends Component {
     } 
 
     setCurso(option){
+        debugger ;
         this.props.setCurso(option);
     }
 

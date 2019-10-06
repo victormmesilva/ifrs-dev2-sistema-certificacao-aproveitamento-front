@@ -7,7 +7,8 @@ import DisciplinaSolicitadaInput from '../inputs/DisciplinaSolicitadaInput';
 import DisciplinaCursadaAnteriorInput from '../inputs/DisciplinaCursadaAnteriorInput';
 import CursoInput from '../inputs/CursoInput';
 
-function AproveitamentoEstudosForm(){     
+function AproveitamentoEstudosForm(){   
+    debugger;  
     const [curso, setCurso] = useState('');
     const [cursoInvalido, setCursoInvalido] = useState(false);
 
@@ -30,14 +31,14 @@ function AproveitamentoEstudosForm(){
     
     const fazerRequisicao = (event) => {
         event.preventDefault();      
-        debugger; 
+        debugger;
         if(!curso) setCursoInvalido(true);
         if(!discCursadaAntes) setdiscCursadaAntesInvalida(true);
         if(!discSolicitadaInvalida) setdiscSolicitadaInvalida(true);
         if(!anexos) setAnexosInvalidos(true);
 
-         const requisicao = {
-        //    idAluno: 1,
+        /* const requisicao = {
+            idAluno: 1,
             curso: curso,
             discCursadaAntes,
             discSolicitada: discSolicitada,
@@ -46,7 +47,7 @@ function AproveitamentoEstudosForm(){
         
         setRequisicao(requisicao);
         setShowModal(true);
-        console.log(requisicao); 
+        console.log(requisicao); */
     }
 
     const limparCampos = (event) => {
