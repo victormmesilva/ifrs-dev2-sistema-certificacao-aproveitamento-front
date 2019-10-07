@@ -3,13 +3,58 @@
 import React, { useRef } from 'react';
 import Files from 'react-files';
 import './AnexarArquivosInput.css';
+import { isDebuggerStatement } from '@babel/types';
 
 function AnexarArquivosInput(props) {
     debugger;
-    const { anexos, setAnexos } = props;
+    const { anexos, setAnexos, filesRecive, setFilesRecive } = props;
     const refAnexos = useRef();
+    let files = []; 
 
-    const onFilesChange = (files) => setAnexos(files);
+    const onFilesChange = (files) => {
+       // Process each file
+        let allFiles = [];
+        for (var i = 0; i < files.length; i++) {
+    
+          let file = files[i];
+    
+          // Make new FileReader
+          let reader = new FileReader();
+    
+          // Convert the file to base64 text
+          reader.readAsDataURL(file);
+    
+          // on reader load somthing...
+          reader.onload = () => {
+    
+            // Make a fileInfo Object
+            let fileInfo = {
+              name: file.name,
+              type: file.type,
+              size: Math.round(file.size / 1000) + ' kB',
+              base64: reader.result,
+              file: file,
+            };
+    
+            // Push it to the state
+            allFiles.push(fileInfo);
+            debugger
+            // If all files have been proceed
+            //if(allFiles.length == files.length){
+              // Apply Callback function
+              //if(this.props.multiple) this.props.onDone(allFiles);
+              // else this.props.onDone(allFiles[0]);
+            //}
+    
+          } // reader.onload
+    
+        } // for
+
+        
+        setAnexos(allFiles);
+        setFilesRecive(files); 
+        debugger;
+    }
     
     const onFilesError = (error, file) => {
         console.log('error code ' + error.code + ': ' + error.message)
@@ -41,10 +86,10 @@ function AnexarArquivosInput(props) {
                     {'Clique ou solte aqui os arquivos para anexar'}
                 </Files>
                 {
-                    anexos.length > 0 ? 
+                    filesRecive.length > 0 ? 
                     <div className='files-list'>
                             <ul>
-                                { anexos.map((file) =>
+                                { filesRecive.map((file) =>
                                     <li className='files-list-item' key={file.id}>
                                         <div className='files-list-item-preview'>{
                                             file.preview.type === 'image' ? 

@@ -8,6 +8,7 @@ import Axios from 'axios';
 import { enviroment } from '../../enviroment';
 import { fileToBase64 } from '../../base64';
 
+
 export default class CertificacaoConhecimentosForm extends Component {
 
     constructor(props) {
@@ -17,7 +18,8 @@ export default class CertificacaoConhecimentosForm extends Component {
             disciplinas: [],
             formacaoAtividadeAnterior: "",
             anexos: [],
-            disciplina: {}
+            disciplina: {},
+            anexosRecive:[]
             
 
         }
@@ -68,72 +70,52 @@ export default class CertificacaoConhecimentosForm extends Component {
         return {status:true, message:"OK"}
     }
 
-    anexosToString(value){
+    tratandoAnexos(){
+            let aux = ""; 
+        this.state.anexos.forEach(element => {
+            aux+=element.base64+ "@";
+        });
 
-        value.forEach(element=>{
-            fileToBase64(element)
-        })
-       // file name e file path/
-      //  
-       debugger
-        return value
+        return aux;
     }
-
-    getBase64(file, cb) {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            cb(reader.result)
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
-    }s
-
+   
     fazerRequisicao() {
-        debugger 
+ 
         let requisicao = {
+            id:"",
             formacaoAtividadeAnterior: this.state.formacaoAtividadeAnterior,
             tipo: "certificacao",
-            dataRequisicao: Date.now(),
-            anexos: this.state.anexos,
+            criterioAvaliacao:"",
+            deferido:false,
+            dataRequisicao: "",
+            anexos: this.tratandoAnexos(),
             disciplinaSolicitada: {
                 id: this.state.disciplina.value,
                 nome: this.state.disciplina.label, 
-                cargaHorarioa: this.state.disciplina.carga, 
-
-            
+                cargaHoraria: this.state.disciplina.carga, 
             }
         }
 
-       let returnObject =  this.validaFormacaoAtividadeAnterior({
-            formacaoAtividadeAnterior: this.state.formacaoAtividadeAnterior,
-            tipo: "certificacao",
-            dataRequisicao: Date.now(),
-            anexos: this.state.anexos,
-            disciplinaSolicitada: {
-                id: this.state.disciplina.value,
-                nome: this.state.disciplina.label, 
-                cargaHorarioa: this.state.disciplina.carga, 
-            }
-    });
+       let returnObject =  this.validaFormacaoAtividadeAnterior(requisicao);
+
        if(returnObject.status === false){
 
        }else{
 
+        debugger; 
 
-        this.anexosToString(this.state.anexos)
            Axios.post(`${enviroment}/api/requisicoes/`,{
-            formacaoAtividadeAnterior: this.state.formacaoAtividadeAnterior,
             tipo: "certificacao",
-            dataRequisicao: Date.now(),
-            anexos: this.state.anexos,
+            id:"",
+            formacaoAtividadeAnterior: this.state.formacaoAtividadeAnterior,
+            criterioAvaliacao:"",
+            deferido:false,
+            dataRequisicao: "",
+            anexos: this.tratandoAnexos(),
             disciplinaSolicitada: {
                 id: this.state.disciplina.value,
                 nome: this.state.disciplina.label, 
-                cargaHorarioa: this.state.disciplina.carga, 
-
-            
+                cargaHoraria: this.state.disciplina.carga, 
             }
         }).then(response=>{
                debugger;
@@ -157,6 +139,10 @@ export default class CertificacaoConhecimentosForm extends Component {
         this.setState({ "anexos": anexos })
     }
 
+    setAnexosRecive(anexos){
+        this.setState({ "anexosRecive": anexos })
+    }
+
     render() {
 
         return (
@@ -178,6 +164,9 @@ export default class CertificacaoConhecimentosForm extends Component {
                 <AnexarArquivosInput
                     anexos={this.state.anexos}
                     setAnexos={(anexos) => this.setAnexos(anexos)}
+                    filesRecive = {this.state.anexosRecive}
+                    setFilesRecive = {(anexosRecive) => this.setAnexosRecive(anexosRecive)}
+
                 // onError={anexosInvalidos}
                 />
 
