@@ -3,16 +3,11 @@ import { Form } from 'react-bootstrap';
 import Select from 'react-select';
 
 const defaultSelect = {label: 'Selecione a disciplina que deseja aproveitar', value: ''};
-const disciplinasJSON = [
-    {id: 1, nome: 'Banco de Dados'},
-    {id: 2, nome: 'Desenvolvimento de Sistemas I'},
-    {id: 3, nome: 'Desenvolvimento de Sistemas II'},
-];
 
-export default function DisciplinaSolicitadaInput({ disabled, setDiscSolicitada, onError, value }) {
+export default function DisciplinaSolicitadaInput({ curso, disabled, setDiscSolicitada, onError, value }) {
     const [disciplinas, setDisciplinas] = useState([]);
 
-    useEffect(() => setDisciplinas(disciplinasJSON), []);
+    useEffect(() => setDisciplinas([]), []);
 
     return (
         <Form.Group>
@@ -20,10 +15,9 @@ export default function DisciplinaSolicitadaInput({ disabled, setDiscSolicitada,
                 Disciplina solicitada
             </Form.Label>
             <Select
-                id="disciplina-solicitada"
                 onChange={(option) => setDiscSolicitada(option)}
                 selectedOption={null}
-                options={disciplinas.map(disciplina => ({ value: disciplina.id, label: disciplina.nome}))}
+                options={disciplinas && disciplinas.length && disciplinas.map(disciplina => ({ value: disciplina.id, label: disciplina.nome}))}
                 value={value || defaultSelect}
                 isDisabled={disabled}
             />

@@ -3,12 +3,54 @@ import Files from 'react-files';
 import './AnexarArquivosInput.css';
 import { Form, Button } from 'react-bootstrap';
 
-export default function AnexarArquivosInput({ anexos, setAnexos, onError }) {
+export default function AnexarArquivosInput({ anexos, setAnexos, filesRecive, setFilesRecive, onError }) {
     const refAnexos = useRef();
     
     useEffect(() => refAnexos.current.setState({ files: anexos}), [anexos]);
 
-    const onFilesChange = (files) => setAnexos(files);
+    const onFilesChange = (files) => {
+       // Process each file
+        let allFiles = [];
+        for (var i = 0; i < files.length; i++) {
+    
+          let file = files[i];
+    
+          // Make new FileReader
+          let reader = new FileReader();
+    
+          // Convert the file to base64 text
+          reader.readAsDataURL(file);
+    
+          // on reader load somthing...
+          reader.onload = () => {
+    
+            // Make a fileInfo Object
+            let fileInfo = {
+              name: file.name,
+              type: file.type,
+              size: Math.round(file.size / 1000) + ' kB',
+              base64: reader.result,
+              file: file,
+            };
+    
+            // Push it to the state
+            allFiles.push(fileInfo);
+            debugger
+            // If all files have been proceed
+            //if(allFiles.length == files.length){
+              // Apply Callback function
+              //if(this.props.multiple) this.props.onDone(allFiles);
+              // else this.props.onDone(allFiles[0]);
+            //}
+    
+          } // reader.onload
+    
+        } // for
+        
+        setAnexos(allFiles);
+        setFilesRecive(files); 
+        debugger;
+    }
     
     const onFilesError = (error, file) => {
         console.log('error code ' + error.code + ': ' + error.message)
@@ -40,10 +82,10 @@ export default function AnexarArquivosInput({ anexos, setAnexos, onError }) {
                     Clique ou solte aqui os arquivos para anexar
                 </Files>
                 {
-                    anexos.length > 0 ? 
+                    (filesRecive && filesRecive.length > 0) ? 
                     <div className='files-list'>
                             <ul>
-                                {anexos.map((file) =>
+                                { filesRecive.map((file) =>
                                     <li className='files-list-item' key={file.id}>
                                         <div className='files-list-item-preview'>{
                                             file.preview.type === 'image' ? 
@@ -79,6 +121,7 @@ export default function AnexarArquivosInput({ anexos, setAnexos, onError }) {
                     variant="link" 
                     className="m-0 p-0 border-0" 
                     onClick={removerTodosAnexos}
+                    disabled={!anexos.length}
                 >
                     Remover todos os anexos
                 </Button>

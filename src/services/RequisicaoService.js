@@ -1,14 +1,27 @@
-/* import axios from 'axios'; */
+import axios from 'axios';
+import { baseURL } from '../enviroment';
 
-const postRequisicao = (requisicao) => {
+const postRequisicao = async (requisicao) => {
     if(!requisicao) return;
-    
-    try {
-        console.log('Requisição enviada!');
 
-        return requisicao;
+    const URL = `${baseURL}/requisicoes/`;
+    const requisicaoToPost = {
+        tipo: requisicao.tipo,
+        id:"",
+        formacaoAtividadeAnterior: requisicao.formacaoAtividadeAnterior,
+        criterioAvaliacao:"",
+        deferido:false,
+        dataRequisicao: "",
+        anexos: requisicao.anexos,
+        disciplinaSolicitada: requisicao.disciplinaSolicitada
+    };
+
+    try {
+        const requisicaoCriada = await axios.post(URL, requisicaoToPost);
+
+        return requisicaoCriada;
     } catch (error) {
-        console.log('Requisição falhou!');
+        console.log('RequisicaoService/postRequisicao::', error);
     }
 }
 

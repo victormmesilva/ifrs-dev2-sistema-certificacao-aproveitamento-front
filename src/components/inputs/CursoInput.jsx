@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import Select from 'react-select';
+import { getCursos } from '../../services/CursoService';
 
 const defaultSelect = {label: 'Selecione o seu curso', value: ''};
-const cursosJSON = [
-    {id: 1, nome: 'Análise e Desenvolvimento de Sistemas'},
-    {id: 2, nome: 'Letras'},
-    {id: 3, nome: 'Agronomia'},
-];
 
 export default function CursoInput({ setCurso, onError, value }) {
-    const [cursos, setCursos] = useState(cursosJSON);
+    const [cursos, setCursos] = useState([]);
 
-    useEffect(() => setCursos(cursosJSON), []);
+    useEffect(() => setCursos(getCursos()), []);
 
     return (
         <Form.Group>
@@ -21,7 +17,8 @@ export default function CursoInput({ setCurso, onError, value }) {
                 value={value || defaultSelect}
                 onChange={(option) => setCurso(option)}
                 selectedOption={null}
-                options={cursos.map(curso => ({ value: curso.id, label: curso.nome}))}
+                options={cursos && cursos.length && cursos.map(curso => ({ value: curso.id, label: curso.nome}))}
+                onChange={(option) => setCurso(option)}
             />
             {onError && 
                 <Form.Text className="text-danger">

@@ -56,6 +56,8 @@ export default function AproveitamentoEstudosForm(){
             discCursadaAntes,
             anexos: formatarAnexos(),
         });      
+        
+        setShowModal(true);
     }
 
     const enviarRequisicao = async (requisicao) => {
@@ -76,7 +78,7 @@ export default function AproveitamentoEstudosForm(){
         setDiscCursadaAntes('');
         setAnexos([]);
     }
-
+    
     return(
         <>
             <TituloPagina titulo={'Aproveitamento de Estudos'}/>

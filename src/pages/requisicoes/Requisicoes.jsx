@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
-import CertificacaoConhecimentosForm from '../components/forms/CertificacaoConhecimentosForm';
-import AproveitamentoEstudosForm from '../components/forms/AproveitamentoEstudosForm';
+import CertificacaoConhecimentosForm from '../../components/forms/CertificacaoConhecimentosForm';
+import AproveitamentoEstudosForm from '../../components/forms/AproveitamentoEstudosForm';
 
 const CERTIFICACAO = 'CERTIFICACAO';
 const APROVEITAMENTO = 'APROVEITAMENTO';
