@@ -8,7 +8,14 @@ const defaultSelect = {label: 'Selecione o seu curso', value: ''};
 export default function CursoInput({ setCurso, onError, value }) {
     const [cursos, setCursos] = useState([]);
 
-    useEffect(() => setCursos(getCursos()), []);
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getCursos();
+            setCursos(result);
+        }
+                
+        fetchData();
+    }, []);
 
     return (
         <Form.Group>

@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import Select from 'react-select';
+import { getDisciplinas } from '../../services/DisciplinaService';
 
 const defaultSelect = {label: 'Selecione a disciplina que deseja aproveitar', value: ''};
 
 export default function DisciplinaSolicitadaInput({ curso, disabled, setDiscSolicitada, onError, value }) {
     const [disciplinas, setDisciplinas] = useState([]);
 
-    useEffect(() => setDisciplinas([]), []);
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getDisciplinas(curso);
+            
+            setDisciplinas(result);
+        }
+        setDiscSolicitada('');
+        setDisciplinas([]);
+        
+        curso && fetchData();
+    }, [curso]);
 
     return (
         <Form.Group>

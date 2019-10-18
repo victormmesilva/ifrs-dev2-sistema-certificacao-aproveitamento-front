@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button,  } from 'react-bootstrap';
 import TituloPagina from '../TituloPagina';
-import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
-import Blob from 'blob';
-import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
 import DisciplinaSolicitadaInput from '../inputs/DisciplinaSolicitadaInput';
 import DisciplinaCursadaAnteriorInput from '../inputs/DisciplinaCursadaAnteriorInput';
+import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
 import CursoInput from '../inputs/CursoInput';
+import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
 import { postRequisicao } from '../../services/RequisicaoService';
+import Alerta from '../Alerta';
 
-export default function AproveitamentoEstudosForm(){     
+export default function CertificacaoConhecimentosForm() {
     const [curso, setCurso] = useState('');
     const [cursoInvalido, setCursoInvalido] = useState(false);
 
@@ -23,7 +23,9 @@ export default function AproveitamentoEstudosForm(){
     const [anexosInvalidos, setAnexosInvalidos] = useState(false);
     
     const [showModal, setShowModal] = useState(false);
+    const [alert, setAlert] = useState(null);    
     const [requisicao, setRequisicao] = useState(null);
+    const [anexosRecive, setAnexosRecive] = useState([]);
 
     useEffect(() => setCursoInvalido(false), [curso]);
     useEffect(() => setdiscSolicitadaInvalida(false), [discSolicitada]);
@@ -31,70 +33,86 @@ export default function AproveitamentoEstudosForm(){
     useEffect(() => setAnexosInvalidos(false), [anexos]);
     useEffect(() => setShowModal(true), [requisicao]);
 
-    const formatarAnexos = () => anexos.map(anexo => (
-        { id: anexo.id, file: new Blob([anexo, { type: anexo.type }]) })
-    );
-
     const camposInvalidos = () => {
         if(!curso) setCursoInvalido(true);
         if(!discCursadaAntes) setdiscCursadaAntesInvalida(true);
         if(!discSolicitada) setdiscSolicitadaInvalida(true);
-        if(!anexos.length) setAnexosInvalidos(true);
+        /* if(!anexos && !anexos.length) setAnexosInvalidos(true); */
 
-        return ( !curso || !discCursadaAntes || !discSolicitada || !anexos.length );
-    }
-    
-    const montarRequisicao = (event) => {
-        event.preventDefault();      
-        
-        if(camposInvalidos()) return;
-
-        setRequisicao({
-            idAluno: 1,
-            curso: curso.value,
-            discSolicitada: discSolicitada.value,
-            discCursadaAntes,
-            anexos: formatarAnexos(),
-        });      
-        
-        setShowModal(true);
-    }
-
-    const enviarRequisicao = async (requisicao) => {
-        try {
-            const requisicaoCriada = await postRequisicao(requisicao);
-    
-            if(requisicaoCriada) limparCampos();
-            console.log(requisicaoCriada); 
-        } catch (error) {
-            console.log(error.message);
-        }
+        return ( !curso || !discCursadaAntes || !discSolicitada /* || !anexos.length */ );
     }
 
     const limparCampos = () => {
         setRequisicao(null);
-        setCurso(null);
-        setDiscSolicitada(null);
+        setCurso('');
+        setDiscSolicitada('');
         setDiscCursadaAntes('');
         setAnexos([]);
     }
-    
-    return(
+
+    const tratandoAnexos = () => {
+        let aux = ""; 
+        anexos.forEach(element => {
+            aux+=element.base64+ "@";
+        });
+
+        return aux;
+    }
+   
+    const fazerRequisicao = async () => {
+        if(camposInvalidos()) return;
+        
+        const requisicao = {
+            formacaoAtividadeAnterior: discCursadaAntes,
+            tipo: "aproveitamento",
+            anexos: tratandoAnexos(),
+            disciplinaSolicitada: {
+                id: discSolicitada.value,
+                nome: discSolicitada.label, 
+                cargaHoraria: discSolicitada.carga, 
+            }
+        }
+        setRequisicao(requisicao);
+        setShowModal(true);
+    }
+
+    const enviarRequisicao = () => {
+        setShowModal(false);
+        
+        if(postRequisicao(requisicao)){
+            setAlert({
+                mensagem: 'Requisição enviada com sucesso!',
+                tipo: 'success'
+            });
+        } else {
+            setAlert({
+                mensagem: 'ATENÇÃO! Requisição não enviada!',
+                tipo: 'danger'
+            });
+        }
+
+        setTimeout(() => setAlert(null), 3000);
+        limparCampos();
+    }
+
+    return (
         <>
-            <TituloPagina titulo={'Aproveitamento de Estudos'}/>
+            <TituloPagina titulo={'Aproveitamento de Estudos'} />
             
-            <CursoInput
+            {alert && <Alerta mensagem={alert.mensagem} tipo={alert.tipo} setAlert={setAlert}/>}
+
+            <CursoInput 
                 value={curso}
                 setCurso={setCurso} 
-                onError={cursoInvalido}
+                onError={cursoInvalido} 
             />
 
             <DisciplinaSolicitadaInput
                 value={discSolicitada}
-                curso={curso}
-                setDiscSolicitada={setDiscSolicitada} 
+                setDiscSolicitada={setDiscSolicitada}
                 disabled={!curso}
                 onError={discSolicitadaInvalida}
+                curso={curso}
             />
 
             <DisciplinaCursadaAnteriorInput
@@ -103,9 +121,11 @@ export default function AproveitamentoEstudosForm(){
                 onError={discCursadaAntesInvalida}
             />
 
-            <AnexarArquivosInput                 
-                anexos={anexos} 
+            <AnexarArquivosInput
+                anexos={anexos}
                 setAnexos={setAnexos}
+                filesRecive={anexosRecive}
+                setFilesRecive={setAnexosRecive}
                 onError={anexosInvalidos}
             />
 
@@ -114,16 +134,16 @@ export default function AproveitamentoEstudosForm(){
                     Cancelar
                 </Button>
                 
-                <Button variant="primary" className="btn btn-primary m-1" onClick={montarRequisicao}>
+                <Button variant="primary" className="btn btn-primary m-1" onClick={fazerRequisicao}>
                     Enviar
                 </Button>
             </Form.Group>
 
-            {(showModal && requisicao) 
-                && 
+            {(showModal && requisicao)
+                &&
                 <ModalConfirmarRequisicao 
                     requisicao={requisicao} 
-                    setShowModal={setShowModal} 
+                    setShowModal={setShowModal}
                     showModal={showModal}
                     enviarRequisicao={enviarRequisicao}
                 />
@@ -131,3 +151,4 @@ export default function AproveitamentoEstudosForm(){
         </>
     );
 }
+
