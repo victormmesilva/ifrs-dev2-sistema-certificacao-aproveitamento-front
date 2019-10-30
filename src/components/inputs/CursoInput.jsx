@@ -22,7 +22,6 @@ export default function CursoInput({ setCurso, onError, value }) {
             <Form.Label className="mb-1">Curso</Form.Label>
             <Select
                 value={value || defaultSelect}
-                onChange={(option) => setCurso(option)}
                 selectedOption={null}
                 options={cursos && cursos.length && cursos.map(curso => ({ value: curso.id, label: curso.nome}))}
                 onChange={(option) => setCurso(option)}

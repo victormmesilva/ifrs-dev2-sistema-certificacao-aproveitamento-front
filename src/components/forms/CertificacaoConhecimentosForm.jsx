@@ -13,8 +13,8 @@ export default function CertificacaoConhecimentosForm() {
     const [curso, setCurso] = useState('');
     const [cursoInvalido, setCursoInvalido] = useState(false);
 
-    const [discCursadaAntes, setDiscCursadaAntes] = useState('');
-    const [discCursadaAntesInvalida, setdiscCursadaAntesInvalida] = useState(false);
+    const [formacaoAtividadeAnterior, setFormacaoAtividadeAnterior] = useState('');
+    const [formacaoAtividadeAnteriorInvalida, setFormacaoAtividadeAnteriorInvalida] = useState(false);
 
     const [discSolicitada, setDiscSolicitada] = useState('');
     const [discSolicitadaInvalida, setdiscSolicitadaInvalida] = useState(false);
@@ -25,54 +25,43 @@ export default function CertificacaoConhecimentosForm() {
     const [showModal, setShowModal] = useState(false);
     const [alert, setAlert] = useState(null);    
     const [requisicao, setRequisicao] = useState(null);
-    const [anexosRecive, setAnexosRecive] = useState([]);
 
     useEffect(() => setCursoInvalido(false), [curso]);
     useEffect(() => setdiscSolicitadaInvalida(false), [discSolicitada]);
-    useEffect(() => setdiscCursadaAntesInvalida(false), [discCursadaAntes]);
+    useEffect(() => setFormacaoAtividadeAnteriorInvalida(false), [formacaoAtividadeAnterior]);
     useEffect(() => setAnexosInvalidos(false), [anexos]);
     useEffect(() => setShowModal(true), [requisicao]);
 
     const camposInvalidos = () => {
         if(!curso) setCursoInvalido(true);
-        if(!discCursadaAntes) setdiscCursadaAntesInvalida(true);
+        if(!formacaoAtividadeAnterior) setFormacaoAtividadeAnteriorInvalida(true);
         if(!discSolicitada) setdiscSolicitadaInvalida(true);
-        /* if(!anexos && !anexos.length) setAnexosInvalidos(true); */
+        if(!anexos && !anexos.length) setAnexosInvalidos(true);
 
-        return ( !curso || !discCursadaAntes || !discSolicitada /* || !anexos.length */ );
+        return ( !curso || !formacaoAtividadeAnterior || !discSolicitada || !anexos.length );
     }
 
     const limparCampos = () => {
         setRequisicao(null);
         setCurso('');
         setDiscSolicitada('');
-        setDiscCursadaAntes('');
+        setFormacaoAtividadeAnterior('');
         setAnexos([]);
-    }
-
-    const tratandoAnexos = () => {
-        let aux = ""; 
-        anexos.forEach(element => {    
-            aux+=element.base64+ "@";
-        });
-
-        return aux;
     }
    
     const fazerRequisicao = async () => {
         if(camposInvalidos()) return;
         
-        const requisicao = {
-            formacaoAtividadeAnterior: discCursadaAntes,
+        setRequisicao({
+            formacaoAtividadeAnterior,
             tipo: "certificacao",
-            anexos: tratandoAnexos(),
+            anexos,
             disciplinaSolicitada: {
                 id: discSolicitada.value,
                 nome: discSolicitada.label, 
                 cargaHoraria: discSolicitada.carga, 
             }
-        }
-        setRequisicao(requisicao);
+        });
         setShowModal(true);
     }
 
@@ -116,16 +105,14 @@ export default function CertificacaoConhecimentosForm() {
             />
 
             <DisciplinaCursadaAnteriorInput
-                value={discCursadaAntes}
-                setDiscCursadaAntes={setDiscCursadaAntes}
-                onError={discCursadaAntesInvalida}
+                value={formacaoAtividadeAnterior}
+                setDiscCursadaAntes={setFormacaoAtividadeAnterior}
+                onError={formacaoAtividadeAnteriorInvalida}
             />
 
             <AnexarArquivosInput
                 anexos={anexos}
                 setAnexos={setAnexos}
-                filesRecive={anexosRecive}
-                setFilesRecive={setAnexosRecive}
                 onError={anexosInvalidos}
             />
 

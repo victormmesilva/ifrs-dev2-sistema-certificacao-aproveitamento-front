@@ -18,7 +18,7 @@ export default function DisciplinaSolicitadaInput({ curso, disabled, setDiscSoli
         setDisciplinas([]);
         
         curso && fetchData();
-    }, [curso]);
+    }, [curso, setDiscSolicitada]);
 
     return (
         <Form.Group>

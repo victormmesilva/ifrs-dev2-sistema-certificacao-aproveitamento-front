@@ -13,11 +13,11 @@ export default function CertificacaoConhecimentosForm() {
     const [curso, setCurso] = useState('');
     const [cursoInvalido, setCursoInvalido] = useState(false);
 
-    const [discCursadaAntes, setDiscCursadaAntes] = useState('');
-    const [discCursadaAntesInvalida, setdiscCursadaAntesInvalida] = useState(false);
+    const [disciplinasCursadasAnterior, setDisciplinasCursadasAnterior] = useState('');
+    const [disciplinasCursadasAnteriorInvalida, setDisciplinasCursadasAnteriorInvalida] = useState(false);
 
     const [discSolicitada, setDiscSolicitada] = useState('');
-    const [discSolicitadaInvalida, setdiscSolicitadaInvalida] = useState(false);
+    const [discSolicitadaInvalida, setDiscSolicitadaInvalida] = useState(false);
 
     const [anexos, setAnexos] = useState([]);
     const [anexosInvalidos, setAnexosInvalidos] = useState(false);
@@ -25,54 +25,43 @@ export default function CertificacaoConhecimentosForm() {
     const [showModal, setShowModal] = useState(false);
     const [alert, setAlert] = useState(null);    
     const [requisicao, setRequisicao] = useState(null);
-    const [anexosRecive, setAnexosRecive] = useState([]);
 
     useEffect(() => setCursoInvalido(false), [curso]);
-    useEffect(() => setdiscSolicitadaInvalida(false), [discSolicitada]);
-    useEffect(() => setdiscCursadaAntesInvalida(false), [discCursadaAntes]);
+    useEffect(() => setDiscSolicitadaInvalida(false), [discSolicitada]);
+    useEffect(() => setDisciplinasCursadasAnteriorInvalida(false), [disciplinasCursadasAnterior]);
     useEffect(() => setAnexosInvalidos(false), [anexos]);
     useEffect(() => setShowModal(true), [requisicao]);
 
     const camposInvalidos = () => {
         if(!curso) setCursoInvalido(true);
-        if(!discCursadaAntes) setdiscCursadaAntesInvalida(true);
-        if(!discSolicitada) setdiscSolicitadaInvalida(true);
-        /* if(!anexos && !anexos.length) setAnexosInvalidos(true); */
+        if(!disciplinasCursadasAnterior) setDisciplinasCursadasAnteriorInvalida(true);
+        if(!discSolicitada) setDiscSolicitadaInvalida(true);
+        if(!anexos && !anexos.length) setAnexosInvalidos(true);
 
-        return ( !curso || !discCursadaAntes || !discSolicitada /* || !anexos.length */ );
+        return ( !curso || !disciplinasCursadasAnterior || !discSolicitada || !anexos.length );
     }
 
     const limparCampos = () => {
         setRequisicao(null);
         setCurso('');
         setDiscSolicitada('');
-        setDiscCursadaAntes('');
+        setDisciplinasCursadasAnterior('');
         setAnexos([]);
-    }
-
-    const tratandoAnexos = () => {
-        let aux = ""; 
-        anexos.forEach(element => {
-            aux+=element.base64+ "@";
-        });
-
-        return aux;
     }
    
     const fazerRequisicao = async () => {
         if(camposInvalidos()) return;
         
-        const requisicao = {
-            formacaoAtividadeAnterior: discCursadaAntes,
+        setRequisicao({
+            disciplinasCursadasAnterior,
             tipo: "aproveitamento",
-            anexos: tratandoAnexos(),
+            anexos,
             disciplinaSolicitada: {
                 id: discSolicitada.value,
                 nome: discSolicitada.label, 
                 cargaHoraria: discSolicitada.carga, 
             }
-        }
-        setRequisicao(requisicao);
+        });
         setShowModal(true);
     }
 
@@ -116,16 +105,14 @@ export default function CertificacaoConhecimentosForm() {
             />
 
             <DisciplinaCursadaAnteriorInput
-                value={discCursadaAntes}
-                setDiscCursadaAntes={setDiscCursadaAntes}
-                onError={discCursadaAntesInvalida}
+                value={disciplinasCursadasAnterior}
+                setDiscCursadaAntes={setDisciplinasCursadasAnterior}
+                onError={disciplinasCursadasAnteriorInvalida}
             />
 
             <AnexarArquivosInput
                 anexos={anexos}
                 setAnexos={setAnexos}
-                filesRecive={anexosRecive}
-                setFilesRecive={setAnexosRecive}
                 onError={anexosInvalidos}
             />
 
