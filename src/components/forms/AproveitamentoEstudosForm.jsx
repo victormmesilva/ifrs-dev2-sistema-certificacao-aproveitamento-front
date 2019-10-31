@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button,  } from 'react-bootstrap';
 import TituloPagina from '../TituloPagina';
-import DisciplinaSolicitadaInput from '../inputs/DisciplinaSolicitadaInput';
-import DisciplinaCursadaAnteriorInput from '../inputs/DisciplinaCursadaAnteriorInput';
+import SACEInput from '../inputs/SACEInput';
+import DisciplinaSolicitadaSelect from '../inputs/DisciplinaSolicitadaSelect';
 import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
-import CursoInput from '../inputs/CursoInput';
+import CursoSelect from '../inputs/CursoSelect';
 import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
 import { postRequisicao } from '../../services/RequisicaoService';
-import Alerta from '../Alerta';
+import SACEAlert from '../SACEAlert';
 
 export default function CertificacaoConhecimentosForm() {
     const [curso, setCurso] = useState('');
@@ -53,6 +53,7 @@ export default function CertificacaoConhecimentosForm() {
         if(camposInvalidos()) return;
         
         setRequisicao({
+            curso,
             disciplinasCursadasAnterior,
             tipo: "aproveitamento",
             anexos,
@@ -88,26 +89,29 @@ export default function CertificacaoConhecimentosForm() {
         <>
             <TituloPagina titulo={'Aproveitamento de Estudos'} />
             
-            {alert && <Alerta mensagem={alert.mensagem} tipo={alert.tipo} setAlert={setAlert}/>}
+            {alert && <SACEAlert mensagem={alert.mensagem} tipo={alert.tipo} setAlert={setAlert}/>}
 
-            <CursoInput 
+            <CursoSelect
                 value={curso}
-                setCurso={setCurso} 
+                onChange={setCurso} 
                 onError={cursoInvalido} 
             />
 
-            <DisciplinaSolicitadaInput
+            <DisciplinaSolicitadaSelect
                 value={discSolicitada}
-                setDiscSolicitada={setDiscSolicitada}
+                onChange={setDiscSolicitada}
                 disabled={!curso}
                 onError={discSolicitadaInvalida}
                 curso={curso}
             />
 
-            <DisciplinaCursadaAnteriorInput
+            <SACEInput
+                label={'Disciplina cursada anteriormente'}
+                placeholder={'Preencha com o nome da disciplina que você cursou em outra instituição'}
                 value={disciplinasCursadasAnterior}
-                setDiscCursadaAntes={setDisciplinasCursadasAnterior}
+                onChange={({ target }) => setDisciplinasCursadasAnterior(target.value)}
                 onError={disciplinasCursadasAnteriorInvalida}
+                onErrorMessage={'O campo disciplina anterior é obrigatório.'}
             />
 
             <AnexarArquivosInput
@@ -138,4 +142,3 @@ export default function CertificacaoConhecimentosForm() {
         </>
     );
 }
-

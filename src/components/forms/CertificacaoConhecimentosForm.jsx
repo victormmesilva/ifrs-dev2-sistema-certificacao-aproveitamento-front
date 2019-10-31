@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button,  } from 'react-bootstrap';
 import TituloPagina from '../TituloPagina';
-import DisciplinaSolicitadaInput from '../inputs/DisciplinaSolicitadaInput';
-import DisciplinaCursadaAnteriorInput from '../inputs/DisciplinaCursadaAnteriorInput';
+import CursoSelect from '../inputs/CursoSelect';
+import DisciplinaSolicitadaSelect from '../inputs/DisciplinaSolicitadaSelect';
+import SACEInput from '../inputs/SACEInput';
 import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
-import CursoInput from '../inputs/CursoInput';
 import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
 import { postRequisicao } from '../../services/RequisicaoService';
-import Alerta from '../Alerta';
+import SACEAlert from '../SACEAlert';
 
 export default function CertificacaoConhecimentosForm() {
     const [curso, setCurso] = useState('');
@@ -88,26 +88,30 @@ export default function CertificacaoConhecimentosForm() {
         <>
             <TituloPagina titulo={'Certificação de Conhecimentos'} />
             
-            {alert && <Alerta mensagem={alert.mensagem} tipo={alert.tipo} setAlert={setAlert}/>}
+            {alert && <SACEAlert mensagem={alert.mensagem} tipo={alert.tipo} setAlert={setAlert}/>}
 
-            <CursoInput 
+            <CursoSelect
                 value={curso}
-                setCurso={setCurso} 
+                onChange={setCurso} 
                 onError={cursoInvalido} 
             />
 
-            <DisciplinaSolicitadaInput
+            <DisciplinaSolicitadaSelect
                 value={discSolicitada}
-                setDiscSolicitada={setDiscSolicitada}
+                onChange={setDiscSolicitada}
                 disabled={!curso}
                 onError={discSolicitadaInvalida}
                 curso={curso}
             />
 
-            <DisciplinaCursadaAnteriorInput
+            <SACEInput
+                label={'Formação ou atividade exercida anteriormente'}
+                placeholder={'Preencha com o nome da formação ou atividade que você exerceu/exerce em outra instituição'}
+                onChange={({target}) => setFormacaoAtividadeAnterior(target.value)}
                 value={formacaoAtividadeAnterior}
-                setDiscCursadaAntes={setFormacaoAtividadeAnterior}
+                setFormacaoAtividadeAnterior={setFormacaoAtividadeAnterior}
                 onError={formacaoAtividadeAnteriorInvalida}
+                onErrorMessage={'O campo formação ou atividade é obrigatório.'}
             />
 
             <AnexarArquivosInput
@@ -138,4 +142,3 @@ export default function CertificacaoConhecimentosForm() {
         </>
     );
 }
-
