@@ -7,6 +7,7 @@ import MinhasRequisicoes from './pages/MinhasRequisicoes';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import SACENavbar from './components/SACENavbar';
+import Cadastro from './pages/cadastros/Cadastro';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -16,6 +17,7 @@ ReactDOM.render(
                 <Route exact path="/" component={Inicio} />
                 <Route path="/nova-requisicao" component={NovaRequisicao} />           
                 <Route path="/minhas-requisicoes" component={MinhasRequisicoes} />           
+                <Route path="/cadastro-aluno" component={Cadastro} />           
             </Switch>
         </div>
     </BrowserRouter>,
