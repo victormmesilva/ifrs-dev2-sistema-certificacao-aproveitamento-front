@@ -102,7 +102,7 @@ export default function Cadastro(){
                 onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
             />
 
-            <Button>Enviar</Button>
+            <Button onClick={()=> null}>Enviar</Button>
             <Button>Limpar</Button>
 
         </Form.Group>

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { baseURL } from '../enviroment';
 
 const postAluno = async (aluno) => {
-    if(!requisicao) return;
+    if(!aluno) return;
 
     const URL = `${baseURL}/alunos/`;
     //tipo matricula dataIngresso senha nome login novaSenha email permissoes permissoes
@@ -22,7 +22,7 @@ const postAluno = async (aluno) => {
 
         return alunoCriado;
     } catch (error) {
-        console.log('AlunoService/posAluno::', error);
+        console.log('AlunoService/postAluno::', error);
     }
 }
 
