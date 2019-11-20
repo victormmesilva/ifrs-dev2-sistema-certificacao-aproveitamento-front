@@ -28,6 +28,7 @@ export default function SACENavbar() {
                     <SACELink to={'/'} label={'Início'}/>
                     <SACELink to={'/minhas-requisicoes'} label={'Minhas requisições'}/>
                     <SACELink to={'/nova-requisicao'} label={'Nova requisição'}/>
+                    <SACELink to={'/listar-cursos'} label={' Listar cursos'}/>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
