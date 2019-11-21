@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import SACENavbar from './components/SACENavbar';
 import Cadastro from './pages/cadastros/Cadastro';
 import ListaCursos from './Cursos/ListaCursos';
+import LoginForm from './components/forms/LoginForm'
 
 ReactDOM.render(
     <BrowserRouter>
@@ -19,7 +20,8 @@ ReactDOM.render(
                 <Route path="/nova-requisicao" component={NovaRequisicao} />           
                 <Route path="/minhas-requisicoes" component={MinhasRequisicoes} />           
                 <Route path="/cadastro-aluno" component={Cadastro} />           
-                <Route path="/listar-cursos" component={ListaCursos} />           
+                <Route path="/listar-cursos" component={ListaCursos} />  
+                <Route path="/login" component={LoginForm}/>         
             </Switch>
         </div>
     </BrowserRouter>,

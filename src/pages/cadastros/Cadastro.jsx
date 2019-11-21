@@ -58,7 +58,8 @@ export default function Cadastro(){
         setEmail('');
         setSenha('');
         setDataIngresso(''); 
-        setConfirmaSenha(''); 
+        setConfirmaSenha('');
+        setPermissoes('') 
     }
    
     const fazerRequisicao = async () => {
@@ -95,18 +96,8 @@ export default function Cadastro(){
         limparCampos();
     }
 
-/*
+    
 
-         /*   <SACEInput
-                label={'Matricula'}
-                placeholder={'Informe a matrícula. '}
-                onChange={({target}) => setEmail(target.value)}
-                value={matricula}
-                setMatricula={setMatricula}
-                onError={matriculaInvalida}
-                onErrorMessage={'Você não inseriu uma matrícula válida!'}
-            />
-*/
     return(
         <Form.Group className="col-md-6 container">
             <TituloPagina titulo="Cadastro de Alunos"/>

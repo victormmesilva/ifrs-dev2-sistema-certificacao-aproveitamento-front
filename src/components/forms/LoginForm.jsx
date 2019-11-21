@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import TituloPagina from '../../components/TituloPagina';
 import { Form, Button } from 'react-bootstrap';
 import SACEInput from '../../components/inputs/SACEInput';
@@ -9,6 +9,8 @@ export default function LoginForm (){
     const [loginInvalido, setLoginInvalido] = useState(false); 
     const [senha, setSenha] = useState(""); 
     const [senhaInvalida, setSenhaInvalida] = useState(false); 
+    const [camposValidos, setCamposValidos] = useState(false)
+    const [camposInvalidos, setCamposInvalidos] = useState(false)
     const [usuario, setUsuario] = useState(null);
     useEffect(() => setLoginInvalido(false), [login]);
     useEffect(() => setSenhaInvalida(false), [senha]);
@@ -26,13 +28,11 @@ export default function LoginForm (){
            login,
            senha
         });
-        getLogin(usuario);
+    
     }
     
-
-
     return(
-        <Form.Group>
+        <Form.Group className="container col-md-6" style={{position:"relative", top:"60px"}}>
             <SACEInput
                 label={'Login'}
                 placeholder={'Informe o seu Login. '}
@@ -43,7 +43,7 @@ export default function LoginForm (){
                 onErrorMessage={'Você não inseriu o seu login corretamente!'}
             />
             <SACEInput
-                label={'senha'}
+                label={'Senha'}
                 placeholder={'Informe o sua senha. '}
                 onChange={({target}) => setSenha(target.value)}
                 value={senha}
@@ -52,13 +52,12 @@ export default function LoginForm (){
                 onErrorMessage={'Você não inseriu o sua senha corretamente!'}
             />
               <Form.Group className="d-flex justify-content-end">
-                <Button variant="link" className="btn btn-link m-1" onClick={limparCampos}>
-                    Cancelar
-                </Button>
-                
-                <Button variant="primary" className="btn btn-primary m-1" onClick={fazerLogin}>
-                    Enviar
-                </Button>
+                    <Button variant="primary" className="btn btn-primary m-1" onClick={fazerLogin}>
+                            Enviar
+                    </Button>
+                    <Button variant="link" className="btn btn-link m-1" onClick={limparCampos}>
+                        Cancelar
+                    </Button>
             </Form.Group>
 
         </Form.Group>
