@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Form } from 'react-bootstrap';
+import InputGroup, { InputGroupText } from 'react-bootstrap/InputGroup';
 
 export default function SACEInput(props) {
     const {
@@ -9,6 +11,7 @@ export default function SACEInput(props) {
         value,
         onError,
         onErrorMessage,
+        tipo
     } = props;
 
     return (
@@ -17,7 +20,7 @@ export default function SACEInput(props) {
                 {label}
             </Form.Label>
             <Form.Control 
-                type="text"  
+                type={tipo}  
                 placeholder={placeholder}
                 onChange={onChange}
                 value={value}
@@ -28,5 +31,13 @@ export default function SACEInput(props) {
                 </Form.Text>
             }
         </Form.Group>
+        
     );
+}
+
+SACEInput.propTypes = {
+    tipo: PropTypes.string
+}
+SACEInput.defaultProps = {
+    tipo:"text"
 }

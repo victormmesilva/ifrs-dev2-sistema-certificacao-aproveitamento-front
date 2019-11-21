@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { baseURL } from '../enviroment';
 
-const postAluno = async (aluno) => {
+const postCadastroAluno = async (aluno) => {
     if(!aluno) return;
 
     const URL = `${baseURL}/alunos/`;
@@ -26,4 +26,4 @@ const postAluno = async (aluno) => {
     }
 }
 
-export { aluno };
+export { postCadastroAluno };

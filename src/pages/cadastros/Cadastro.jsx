@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import TituloPagina from '../../components/TituloPagina';
 import { Form, Button } from 'react-bootstrap';
 import SACEInput from '../../components/inputs/SACEInput';
+import { postCadastroAluno } from '../../services/AlunoService';
 
 
 export default function Cadastro(){
@@ -10,8 +11,13 @@ export default function Cadastro(){
 
     const [tipo] = useState("aluno");
 
+    const[aluno, setAluno] = useState('')
+    const[alunoInvalido, setAlunoInvalido] = useState(false)
+
+    const[showModal, setShowModal] = useState('')
+
     const [dataIngresso, setDataIngresso] = useState(""); 
-    const [dataIngressoInvalida, setDataIngressoInvalida] = useState(false); 
+    const [dataIngressoInvalido, setDataIngressoInvalido] = useState(false); 
     
     const [senha, setSenha] = useState(""); 
     const [senhaInvalida, setSenhaInvalida] = useState(false); 
@@ -24,15 +30,86 @@ export default function Cadastro(){
     
     const [confirmaSenha, setConfirmaSenha] = useState(""); 
     const [confirmaSenhaInvalida, setConfirmaSernhaInvalida] = useState(false); 
-
+    const [alert, setAlert] = useState(null);
     const [email, setEmail] = useState(""); 
     const [emailInvalido, setEmailInvalido] = useState(false); 
 
     const [permissoes, setPermissoes] = useState(""); 
 
+    const [cadastro, setCadastro] = useState(""); 
 
+    const camposInvalidos = () => {
+        if(!aluno) setAlunoInvalido(true);
+        if(!email) setEmailInvalido(true);
+        if(!matricula) setMatriculaInvalida(true);
+        if(!senha && !senha.length) setSenhaInvalida(true);
+        if(!dataIngresso) setDataIngressoInvalido(true); 
+        if(!nome) setNomeInvalido(true);
+        if(!confirmaSenha) setConfirmaSernhaInvalida(true);
+
+        return ( !aluno || !email || !matricula || !senha ||
+            !dataIngresso || !nome || confirmaSenha );
+    }
+
+    const limparCampos = () => {
+        setCadastro(null);
+        setAluno('');
+        setMatricula('');
+        setEmail('');
+        setSenha('');
+        setDataIngresso(''); 
+        setConfirmaSenha(''); 
+    }
+   
+    const fazerRequisicao = async () => {
+        if(camposInvalidos()) return;
+        
+        setCadastro({
+            aluno,
+            email,
+            tipo: "aluno",
+            senha,
+            dataIngresso, 
+            confirmaSenha,
+            login            
+        });
+        setShowModal(true);
+    }
+
+    const enviarCadastro = () => {
+        setShowModal(false);
+        
+        if(postCadastroAluno(cadastro)){
+            setAlert({
+                mensagem: 'Cadatro enviado com sucesso!',
+                tipo: 'success'
+            });
+        } else {
+            setAlert({
+                mensagem: 'ATENÇÃO! Você não pode inserir um novo cadastro com itens faltando!',
+                tipo: 'danger'
+            });
+        }
+
+        setTimeout(() => setAlert(null), 3000);
+        limparCampos();
+    }
+
+/*
+
+         /*   <SACEInput
+                label={'Matricula'}
+                placeholder={'Informe a matrícula. '}
+                onChange={({target}) => setEmail(target.value)}
+                value={matricula}
+                setMatricula={setMatricula}
+                onError={matriculaInvalida}
+                onErrorMessage={'Você não inseriu uma matrícula válida!'}
+            />
+*/
     return(
-        <Form.Group>
+        <Form.Group className="col-md-6 container">
+            <TituloPagina titulo="Cadastro de Alunos"/>
             <SACEInput
                 label={'Nome'}
                 placeholder={'Informe o seu nome. '}
@@ -60,24 +137,22 @@ export default function Cadastro(){
                 onError={matriculaInvalida}
                 onErrorMessage={'Você não inseriu a sua matrícula corretamente!'}
             />
-            Data de entrada
-            <br/>
-            <br/>
-            <input type="date" value = { dataIngresso} onChange={(e)=> setDataIngresso(e.target.value)}/>
 
-            <SACEInput
-                label={'Matricula'}
-                placeholder={'Informe a matrícula. '}
-                onChange={({target}) => setEmail(target.value)}
-                value={matricula}
-                setMatricula={setMatricula}
-                onError={matriculaInvalida}
-                onErrorMessage={'Você não inseriu uma matrícula válida!'}
+            <SACEInput 
+                label={'Data de Ingresso'}
+                placeholder={'Informe a data de Ingresso. '}
+                onChange={({target}) => setDataIngresso(target.value)}
+                value={dataIngresso}
+                setDataIngresso={setDataIngresso}
+                onError={dataIngressoInvalido}
+                onErrorMessage={'Você não inseriu uma data válida!'}
+                tipo={"date"}
             />
+
             <SACEInput 
                 label={'Login'}
                 placeholder={'Informe um login. '}
-                onChange={({target}) => setEmail(target.value)}
+                onChange={({target}) => setLogin(target.value)}
                 value={login}
                 setLogin={setLogin}
                 onError={loginInvalido}
@@ -86,8 +161,8 @@ export default function Cadastro(){
             <SACEInput 
                 label={'Senha'}
                 placeholder={'Informe uma senha. '}
-                onChange={({target}) => setEmail(target.value)}
-                value={login}
+                onChange={({target}) => setSenha(target.value)}
+                value={senha}
                 setSenha={setSenha}
                 onError={senhaInvalida}
                 onErrorMessage={'Você inseriu uma senha inválida!'}
@@ -95,16 +170,16 @@ export default function Cadastro(){
             <SACEInput 
                 label={'Confirme a sua senha'}
                 placeholder={'Informe a mesma senha que a anterior. '}
-                onChange={({target}) => setEmail(target.value)}
+                onChange={({target}) => setConfirmaSenha(target.value)}
                 value={confirmaSenha}
-                setLogin={setConfirmaSenha}
+                setConfirmaSenha={setConfirmaSenha}
                 onError={confirmaSenhaInvalida}
                 onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
             />
-
-            <Button onClick={()=> null}>Enviar</Button>
-            <Button>Limpar</Button>
-
+            <div className="row container" style={{position: 'relative', left:'32%'}}>
+            <Button onClick={()=> enviarCadastro()} className="btn btn-dark" style={{border: "5px solid white"}}>Enviar</Button>
+            <Button className="btn btn-danger" style={{border: "5px solid white"}}>Limpar</Button>
+           </div> 
         </Form.Group>
     );
 }
