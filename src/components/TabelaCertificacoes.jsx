@@ -7,25 +7,40 @@ import './tabelarequisicoes.css';
 export default function() {
     const [requisicoes, setRequisicoes] = useState([]);
     const [alert, setAlert] = useState('');
-  
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
+      setIsLoading(true);
       getCertificacoes()
-        .then(result => setRequisicoes(result))
-        .catch(error => setAlert({
+        .then(result => {
+          setRequisicoes(result);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          setAlert({
             mensagem: error.message,
             tipo: 'danger',
-          })
-        );
+          });
+          setIsLoading(false);
+        });
     }, []);
 
     return (
       <>
         <h6>Lista de requisições de certificação de estudos</h6>
         {alert && <Alert variant={alert.tipo}>{alert.mensagem}</Alert>}
-        {
-          requisicoes && 
-          requisicoes.map(requisicao => <CardCertificacao requisicao={requisicao} />)
-        }    
+          {
+            isLoading 
+            ? 
+              <div style={{ minHeight: '300px'}} className="d-flex align-items-center justify-content-center text-primary">
+                <div className="spinner-border" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              </div>
+            :
+              requisicoes && 
+              requisicoes.map(requisicao => <CardCertificacao requisicao={requisicao} />)
+          }    
       </>
     );
 }
