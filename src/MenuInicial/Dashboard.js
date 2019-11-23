@@ -36,28 +36,11 @@ export default class DashBoard extends Component{
     }
 
     render() {
-
-      const btnRequisicao = {
-        margin: "0px 2px 75px 40%",
-        color: "white",
-        backgroundColor: "DodgerBlue",
-        padding: "10px",
-        fontFamily: "Arial"
-      };
-
-      const btnCurso = {
-        color: "white",
-        backgroundColor: "DodgerBlue",
-        padding: "10px",
-        fontFamily: "Arial"
-      };
-
-
       return(
-       <div >
+       <div className="container">
 
         <button style={btnRequisicao} onClick={this.viewRequisicoes.bind(this)}  >Requisicões</button> 
-        <button style={btnCurso} onClick={this.viewCurso.bind(this)}  >Adicionar curso</button> 
+        <button onClick={this.viewCurso.bind(this)}  >Adicionar curso</button> 
         <button style={btnCurso} onClick={this.viewDisciplina.bind(this)}  >Adicionar disciplina</button> 
 
         {this.state.telaSelecionada=="requisicao"?<Requisicoes/>: ""}    

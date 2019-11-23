@@ -1,9 +1,10 @@
 {
   "name": "sistema-certificacao-aproveitamento-web",
   "version": "0.1.0",
+  "proxy": "http://localhost:8080/",
   "private": true,
-  "proxy": "http://localhost:3000/",
   "dependencies": {
+    "@material-ui/core": "^4.5.2",
     "axios": "^0.19.0",
     "blob": "0.0.5",
     "bootstrap": "^4.3.1",
