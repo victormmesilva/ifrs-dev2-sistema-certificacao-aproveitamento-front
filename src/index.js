@@ -10,7 +10,6 @@ import SACENavbar from './components/SACENavbar';
 import Cadastro from './pages/cadastros/Cadastro';
 import ListaCursos from './Cursos/ListaCursos';
 import LoginForm from './components/forms/LoginForm'
-import Tutorial from './pages/Tutorial';
 import { isAuthenticated } from "./services/TokenService";
 
 
@@ -30,7 +29,6 @@ ReactDOM.render(
                 <Route path="/cadastro-aluno" component={Cadastro} />           
                 <Route path="/listar-cursos" component={ListaCursos} />  
                 <Route path="/login" component={LoginForm}/>         
-                <Route path="/tutorial" component={Tutorial}/>         
             </Switch>
         </div>
     </BrowserRouter>,

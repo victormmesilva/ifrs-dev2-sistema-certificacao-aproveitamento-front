@@ -18,7 +18,6 @@ export default function Inicio() {
           <br/>
           <br/>
           <Link to="/login" className="btn btn-primary">Login </Link>
-          <Link to="/tutorial" className="btn btn-primary">Login </Link>
         </div>
       </div>
     </div>

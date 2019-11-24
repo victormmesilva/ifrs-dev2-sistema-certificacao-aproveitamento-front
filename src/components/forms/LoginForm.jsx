@@ -22,7 +22,7 @@ export default function LoginForm (){
     }
 
     const fazerLogin = async () => {
-        if(camposInvalidos()) return;
+        if(camposInvalidos) return;
         
         setUsuario({
            login,
