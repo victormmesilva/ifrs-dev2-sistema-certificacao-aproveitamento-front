@@ -10,6 +10,10 @@ import SACENavbar from './components/SACENavbar';
 import Cadastro from './pages/cadastros/Cadastro';
 import ListaCursos from './Cursos/ListaCursos';
 import LoginForm from './components/forms/LoginForm'
+import Tutorial from './pages/Tutorial';
+import { isAuthenticated } from "./services/TokenService";
+
+
 
 ReactDOM.render(
     <BrowserRouter>
@@ -17,11 +21,16 @@ ReactDOM.render(
         <div className="container">
             <Switch>
                 <Route exact path="/" component={Inicio} />
-                <Route path="/nova-requisicao" component={NovaRequisicao} />           
-                <Route path="/minhas-requisicoes" component={MinhasRequisicoes} />           
+                {isAuthenticated()?
+                <>
+                    <Route path="/nova-requisicao" component={NovaRequisicao} />           
+                    <Route path="/minhas-requisicoes" component={MinhasRequisicoes} />   
+                 </>        
+                :<Route exact path="/" component={Inicio} />}
                 <Route path="/cadastro-aluno" component={Cadastro} />           
                 <Route path="/listar-cursos" component={ListaCursos} />  
                 <Route path="/login" component={LoginForm}/>         
+                <Route path="/tutorial" component={Tutorial}/>         
             </Switch>
         </div>
     </BrowserRouter>,
