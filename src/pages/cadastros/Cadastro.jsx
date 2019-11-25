@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import TituloPagina from '../../components/TituloPagina';
 import { Form, Button } from 'react-bootstrap';
 import SACEInput from '../../components/inputs/SACEInput';
@@ -36,7 +36,14 @@ export default function Cadastro(){
 
     const [permissoes, setPermissoes] = useState(""); 
 
-    const [cadastro, setCadastro] = useState(""); 
+    const [cadastro, setCadastro] = useState({}); 
+
+    useEffect(() => setAlunoInvalido(false), [aluno]);
+    useEffect(() => setDataIngressoInvalido(false), [dataIngresso]);
+    useEffect(() => setEmailInvalido(false), [email]);
+    useEffect(() => setLoginInvalido(false), [login]);
+     useEffect(() => setShowModal(true), [cadastro]);
+
 
     const camposInvalidos = () => {
         if(!aluno) setAlunoInvalido(true);
@@ -62,9 +69,9 @@ export default function Cadastro(){
         setPermissoes('') 
     }
    
-    const fazerRequisicao = async () => {
+    const fazerCadastro = async () => {
         if(camposInvalidos()) return;
-        
+        debugger;
         setCadastro({
             aluno,
             email,
@@ -78,6 +85,8 @@ export default function Cadastro(){
     }
 
     const enviarCadastro = () => {
+        debugger; 
+        fazerCadastro(); 
         setShowModal(false);
         
         if(postCadastroAluno(cadastro)){
@@ -139,7 +148,6 @@ export default function Cadastro(){
                 onErrorMessage={'Você não inseriu uma data válida!'}
                 tipo={"date"}
             />
-
             <SACEInput 
                 label={'Login'}
                 placeholder={'Informe um login. '}
@@ -157,6 +165,7 @@ export default function Cadastro(){
                 setSenha={setSenha}
                 onError={senhaInvalida}
                 onErrorMessage={'Você inseriu uma senha inválida!'}
+                tipo={"password"}
             />
             <SACEInput 
                 label={'Confirme a sua senha'}
@@ -166,6 +175,8 @@ export default function Cadastro(){
                 setConfirmaSenha={setConfirmaSenha}
                 onError={confirmaSenhaInvalida}
                 onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
+                tipo={"password"}
+
             />
             <div className="row container" style={{position: 'relative', left:'32%'}}>
             <Button onClick={()=> enviarCadastro()} className="btn btn-dark" style={{border: "5px solid white"}}>Enviar</Button>

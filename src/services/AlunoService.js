@@ -2,6 +2,7 @@ import axios from 'axios';
 import { baseURL } from '../enviroment';
 
 const postCadastroAluno = async (aluno) => {
+    debugger; 
     if(!aluno) return;
 
     const URL = `${baseURL}/alunos/`;
