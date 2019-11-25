@@ -1,11 +1,15 @@
-const loginEnvio = function(){
-    const postRequisicao = async (requisicao) => {
-        if(!requisicao) return;
+import axios from 'axios';
+import { baseURL } from '../enviroment';
+import { token } from './axios';
+
+
+    const postLogin = async (login) => {
+        if(!login) return;
          
-        const URL = `${baseURL}/requisicoes/`;
+        const URL = `${baseURL}/usuarios/login`;
     
         try {
-            const response = await axios.post(URL, requisicao, {
+            const response = await axios.post(URL, login, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     Authorization: `Bearer ${token}`,
@@ -17,8 +21,7 @@ const loginEnvio = function(){
             
             return (response.status === 201);
         } catch (error) {
-            console.log('RequisicaoService/postRequisicao::', error);
+            console.log('LoginService/postLogin::', error);
         }
     }
-    
-}
+    export{postLogin};
