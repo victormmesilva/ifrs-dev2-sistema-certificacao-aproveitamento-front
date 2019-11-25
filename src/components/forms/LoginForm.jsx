@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import TituloPagina from '../../components/TituloPagina';
 import { Form, Button } from 'react-bootstrap';
 import SACEInput from '../../components/inputs/SACEInput';
-
+import { Link } from "react-router-dom";
 
 export default function LoginForm (){
     const [login, setLogin] = useState(''); 
@@ -51,7 +51,12 @@ export default function LoginForm (){
                 onError={senhaInvalida}
                 onErrorMessage={'Você não inseriu o sua senha corretamente!'}
             />
-              <Form.Group className="d-flex justify-content-end">
+            <div className="row">
+            <Link to="/cadastro-aluno" >Aluno, não é Cadstrado?</Link>
+            <Link to="#" style={{position:'relative', left:'45%'}}>Esqueceu a sua senha?</Link>
+
+            </div>
+              <Form.Group className="d-flex justify-content-end" style={{position:'relative', top:'50px', right:'30%'}}>
                     <Button variant="primary" className="btn btn-primary m-1" onClick={fazerLogin}>
                             Enviar
                     </Button>
@@ -59,7 +64,6 @@ export default function LoginForm (){
                         Cancelar
                     </Button>
             </Form.Group>
-
         </Form.Group>
     );
 }
