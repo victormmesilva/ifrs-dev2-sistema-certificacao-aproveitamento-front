@@ -31,22 +31,22 @@ export default function Cadastro(){
     const [confirmaSenha, setConfirmaSenha] = useState(""); 
     const [confirmaSenhaInvalida, setConfirmaSernhaInvalida] = useState(false); 
     const [alert, setAlert] = useState(null);
+
     const [email, setEmail] = useState(""); 
     const [emailInvalido, setEmailInvalido] = useState(false); 
 
     const [permissoes, setPermissoes] = useState(""); 
 
-    const [cadastro, setCadastro] = useState({}); 
-
     useEffect(() => setAlunoInvalido(false), [aluno]);
     useEffect(() => setDataIngressoInvalido(false), [dataIngresso]);
     useEffect(() => setEmailInvalido(false), [email]);
     useEffect(() => setLoginInvalido(false), [login]);
-     useEffect(() => setShowModal(true), [cadastro]);
 
 
     const camposInvalidos = () => {
-        if(!aluno) setAlunoInvalido(true);
+        debugger;
+
+        if(!nome) setAlunoInvalido(true);
         if(!email) setEmailInvalido(true);
         if(!matricula) setMatriculaInvalida(true);
         if(!senha && !senha.length) setSenhaInvalida(true);
@@ -54,12 +54,11 @@ export default function Cadastro(){
         if(!nome) setNomeInvalido(true);
         if(!confirmaSenha) setConfirmaSernhaInvalida(true);
 
-        return ( !aluno || !email || !matricula || !senha ||
-            !dataIngresso || !nome || confirmaSenha );
+        return ( !nome || !email || !matricula || !senha ||
+            !dataIngresso || !nome || !confirmaSenha );
     }
 
     const limparCampos = () => {
-        setCadastro(null);
         setAluno('');
         setMatricula('');
         setEmail('');
@@ -69,27 +68,23 @@ export default function Cadastro(){
         setPermissoes('') 
     }
    
-    const fazerCadastro = async () => {
+    const enviarCadastro = async (e) => {
+        
         if(camposInvalidos()) return;
-        debugger;
-        setCadastro({
-            aluno,
+       
+        const cadastroToPost = {
+            nome,
             email,
             tipo: "aluno",
             senha,
             dataIngresso, 
             confirmaSenha,
             login            
-        });
-        setShowModal(true);
-    }
+        };
 
-    const enviarCadastro = () => {
-        debugger; 
-        fazerCadastro(); 
-        setShowModal(false);
-        
-        if(postCadastroAluno(cadastro)){
+        console.log('cadastro', cadastroToPost);
+
+        if(postCadastroAluno(cadastroToPost)){
             setAlert({
                 mensagem: 'Cadatro enviado com sucesso!',
                 tipo: 'success'
@@ -176,10 +171,10 @@ export default function Cadastro(){
                 onError={confirmaSenhaInvalida}
                 onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
                 tipo={"password"}
-
             />
+
             <div className="row container" style={{position: 'relative', left:'32%'}}>
-            <Button onClick={()=> enviarCadastro()} className="btn btn-dark" style={{border: "5px solid white"}}>Enviar</Button>
+            <Button onClick={(e)=> enviarCadastro(e)} className="btn btn-dark" style={{border: "5px solid white"}}>Enviar</Button>
             <Button className="btn btn-danger" style={{border: "5px solid white"}}>Limpar</Button>
            </div> 
         </Form.Group>

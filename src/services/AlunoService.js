@@ -2,10 +2,11 @@ import axios from 'axios';
 import { baseURL } from '../enviroment';
 
 const postCadastroAluno = async (aluno) => {
+    
     debugger; 
     if(!aluno) return;
 
-    const URL = `${baseURL}/alunos/`;
+    const URL = `${baseURL}/usuarios/aluno/`;
     //tipo matricula dataIngresso senha nome login novaSenha email permissoes permissoes
     const alunoToPost = {
         tipo:aluno.tipo,
@@ -20,7 +21,7 @@ const postCadastroAluno = async (aluno) => {
 
     try {
         const alunoCriado = await axios.post(URL, alunoToPost);
-
+        
         return alunoCriado;
     } catch (error) {
         console.log('AlunoService/postAluno::', error);
