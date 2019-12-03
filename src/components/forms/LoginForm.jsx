@@ -33,6 +33,10 @@ export default function LoginForm (){
 
     const enviarLogin = () => {
         setShowModal(false);
+        setUsuario({
+            login,
+            senha
+         });
         
         if(postLogin(usuario)){
             setAlert({
