@@ -3,66 +3,47 @@ import Files from 'react-files';
 import './AnexarArquivosInput.css';
 import { Form, Button } from 'react-bootstrap';
 
-export default function AnexarArquivosInput({ anexos, setAnexos, filesRecive, setFilesRecive, onError }) {
+export default function AnexarArquivosInput({ anexos, setAnexos, onError }) {
     const refAnexos = useRef();
     
-    useEffect(() => refAnexos.current.setState({ files: anexos}), [anexos]);
+    useEffect(() => refAnexos.current.setState({ files: anexos }), [anexos]);
 
-    const onFilesChange = (files) => {
-       // Process each file
-        let allFiles = [];
-        for (var i = 0; i < files.length; i++) {
-    
-          let file = files[i];
-    
-          // Make new FileReader
-          let reader = new FileReader();
-    
-          // Convert the file to base64 text
-          reader.readAsDataURL(file);
-    
-          // on reader load somthing...
-          reader.onload = () => {
-    
-            // Make a fileInfo Object
-            let fileInfo = {
-              name: file.name,
-              type: file.type,
-              size: Math.round(file.size / 1000) + ' kB',
-              base64: reader.result,
-              file: file,
-            };
-    
-            // Push it to the state
-            allFiles.push(fileInfo);
-            debugger
-            // If all files have been proceed
-            //if(allFiles.length == files.length){
-              // Apply Callback function
-              //if(this.props.multiple) this.props.onDone(allFiles);
-              // else this.props.onDone(allFiles[0]);
-            //}
-    
-          } // reader.onload
-    
-        } // for
+    const onFilesChange = async (anexos) => {
+        const promises = anexos.map(
+            anexo => new Promise((resolve) => {
+                if(anexo instanceof Blob) {
+                    let reader = new FileReader();                    
         
-        setAnexos(allFiles);
-        setFilesRecive(files); 
-        debugger;
+                    reader.onload = () => {
+                        resolve({
+                            nome: anexo.name,
+                            tipo: anexo.extension,
+                            tamanho: anexo.sizeReadable,
+                            arquivo: reader.result,
+                            file: anexo,
+                        });
+                    };
+                    
+                    reader.readAsDataURL(anexo);
+                } else {
+                    resolve(anexo);
+                }
+            })
+        );
+    
+        const anexosFormatados = await Promise.all(promises);
+        return setAnexos(anexosFormatados);
     }
     
     const onFilesError = (error, file) => {
         console.log('error code ' + error.code + ': ' + error.message)
     }
     
-    const removerAnexo = (file) => refAnexos.current.removeFile(file);
-    
-    const removerTodosAnexos = (event) => {
-        event.preventDefault();
-        refAnexos.current.removeFiles();
+    const removerAnexo = (anexoParaRemover) => {
+        setAnexos(anexos.filter(({ file }) => file.id !== anexoParaRemover.file.id));
     }
-    //console.log(refAnexos.current.state.files);
+    
+    const removerTodosAnexos = () => setAnexos([]);
 
     return (
         <>
@@ -82,27 +63,27 @@ export default function AnexarArquivosInput({ anexos, setAnexos, filesRecive, se
                     Clique ou solte aqui os arquivos para anexar
                 </Files>
                 {
-                    (filesRecive && filesRecive.length > 0) ? 
+                    (anexos && anexos.length > 0) ? 
                     <div className='files-list'>
                             <ul>
-                                { filesRecive.map((file) =>
-                                    <li className='files-list-item' key={file.id}>
+                                {anexos.map((anexo) =>
+                                    <li className='files-list-item' key={anexo.file.id}>
                                         <div className='files-list-item-preview'>{
-                                            file.preview.type === 'image' ? 
-                                            <img className='files-list-item-preview-image' src={file.preview.url} alt={'Preview do anexo'} />
+                                            anexo.tipo === 'image' ? 
+                                            <img className='files-list-item-preview-image' src={anexo.file.preview.url} alt={'Preview do anexo'} />
                                             : 
-                                            <div className='files-list-item-preview-extension'>{file.extension}</div>
+                                            <div className='files-list-item-preview-extension'>{anexo.tipo}</div>
                                         }</div>
                                         
                                         <div className='files-list-item-content'>
-                                            <div className='files-list-item-content-item files-list-item-content-item-1'>{file.name}</div>
-                                            <div className='files-list-item-content-item files-list-item-content-item-2'>{file.sizeReadable}</div>
+                                            <div className='files-list-item-content-item files-list-item-content-item-1'>{anexo.nome}</div>
+                                            <div className='files-list-item-content-item files-list-item-content-item-2'>{anexo.tamanho}</div>
                                         </div>
                                         
                                         <div
-                                            id={file.id}
+                                            id={anexo.file.id}
                                             className='files-list-item-remove'
-                                            onClick={() => removerAnexo(file)}
+                                            onClick={() => removerAnexo(anexo)}
                                         />
                                     </li>
                                 )}

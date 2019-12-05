@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
-import CertificacaoConhecimentosForm from '../../components/forms/CertificacaoConhecimentosForm';
-import AproveitamentoEstudosForm from '../../components/forms/AproveitamentoEstudosForm';
+import TituloPagina from '../components/TituloPagina';
+import CertificacaoConhecimentosForm from '../components/forms/CertificacaoConhecimentosForm';
+import AproveitamentoEstudosForm from '../components/forms/AproveitamentoEstudosForm';
 
 const CERTIFICACAO = 'CERTIFICACAO';
 const APROVEITAMENTO = 'APROVEITAMENTO';
@@ -17,14 +18,15 @@ const getFormulario = (tipo) => {
     }
 }
 
-export default function Requisicoes(){
+export default function NovaRequisicao(){
     const [tipoRequisicao, setTipoRequisicao] = useState('');
 
     return(
         <>
+            <TituloPagina titulo={'Nova requisição'} />
             <Form.Group className="mx-auto col-6 mb-4 mt-3">
                 <Form.Label className="mb-1">
-                    Selecione o tipo de requisição
+                    {'Selecione o tipo'}
                 </Form.Label>
                 <Form.Control 
                     as="select"
