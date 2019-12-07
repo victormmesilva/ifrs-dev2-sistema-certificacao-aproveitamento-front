@@ -1,24 +1,21 @@
-const loginEnvio = function(){
-    const postRequisicao = async (requisicao) => {
-        if(!requisicao) return;
+import axios from 'axios';
+import { baseURL } from '../enviroment';
+import { token } from './axios';
+
+
+    const postLogin = async (login) => {
+      
          
-        const URL = `${baseURL}/requisicoes/`;
+        const URL = `${baseURL}/usuarios/login/`;
     
         try {
-            const response = await axios.post(URL, requisicao, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    Authorization: `Bearer ${token}`,
-                },
-                params: {
-                    token: token,
-                },
-            });
+            const retorno = await axios.post(URL, login);
+            const token= retorno.headers.token;
+            axios.defaults.headers.common['token']=token;
+            localStorage.setItem("token",token);
             
-            return (response.status === 201);
         } catch (error) {
-            console.log('RequisicaoService/postRequisicao::', error);
+            console.log('LoginService/postLogin::', error);
         }
     }
-    
-}
+    export{postLogin};

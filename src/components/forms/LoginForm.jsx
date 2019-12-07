@@ -2,13 +2,16 @@ import React, {useState, useEffect} from 'react';
 import TituloPagina from '../../components/TituloPagina';
 import { Form, Button } from 'react-bootstrap';
 import SACEInput from '../../components/inputs/SACEInput';
+import { postLogin } from '../../services/LoginService';
 import { Link } from "react-router-dom";
 
 export default function LoginForm (){
     const [login, setLogin] = useState(''); 
     const [loginInvalido, setLoginInvalido] = useState(false); 
     const [senha, setSenha] = useState(""); 
-    const [senhaInvalida, setSenhaInvalida] = useState(false); 
+    const [senhaInvalida, setSenhaInvalida] = useState(false);
+    const[showModal, setShowModal] = useState('')
+    const [alert, setAlert] = useState(null); 
     const [camposValidos, setCamposValidos] = useState(false)
     const [camposInvalidos, setCamposInvalidos] = useState(false)
     const [usuario, setUsuario] = useState(null);
@@ -22,13 +25,33 @@ export default function LoginForm (){
     }
 
     const fazerLogin = async () => {
-        if(camposInvalidos) return;
-        
         setUsuario({
            login,
            senha
         });
-    
+    }
+
+    const enviarLogin = () => {
+        setShowModal(false);
+        setUsuario({
+            login,
+            senha
+         });
+        
+        if(postLogin(usuario)){
+            setAlert({
+                mensagem: 'login realizado com sucesso!',
+                tipo: 'success'
+            });
+        } else {
+            setAlert({
+                mensagem: 'ATENÇÃO! login não realizado!',
+                tipo: 'danger'
+            });
+        }
+
+        setTimeout(() => setAlert(null), 3000);
+        limparCampos();
     }
     
     return(
@@ -57,7 +80,7 @@ export default function LoginForm (){
 
             </div>
               <Form.Group className="d-flex justify-content-end" style={{position:'relative', top:'50px', right:'30%'}}>
-                    <Button variant="primary" className="btn btn-primary m-1" onClick={fazerLogin}>
+                    <Button variant="primary" className="btn btn-primary m-1" onClick={enviarLogin}>
                             Enviar
                     </Button>
                     <Button variant="link" className="btn btn-link m-1" onClick={limparCampos}>
