@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button,  } from 'react-bootstrap';
 import TituloPagina from '../TituloPagina';
-import DisciplinaSolicitadaInput from '../inputs/DisciplinaSolicitadaInput';
-import DisciplinaCursadaAnteriorInput from '../inputs/DisciplinaCursadaAnteriorInput';
+import CursoSelect from '../inputs/CursoSelect';
+import DisciplinaSolicitadaSelect from '../inputs/DisciplinaSolicitadaSelect';
+import SACEInput from '../inputs/SACEInput';
 import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
-import CursoInput from '../inputs/CursoInput';
 import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
-import { fileToBase64 } from '../inputs/FileInpupt';
 import { postRequisicao } from '../../services/RequisicaoService';
-import { getDisciplinas } from '../../services/DisciplinaService';
+import SACEAlert from '../SACEAlert';
 
 export default function CertificacaoConhecimentosForm() {
     const [curso, setCurso] = useState('');
     const [cursoInvalido, setCursoInvalido] = useState(false);
 
-    const [discCursadaAntes, setDiscCursadaAntes] = useState('');
-    const [discCursadaAntesInvalida, setdiscCursadaAntesInvalida] = useState(false);
+    const [formacaoAtividadeAnterior, setFormacaoAtividadeAnterior] = useState('');
+    const [formacaoAtividadeAnteriorInvalida, setFormacaoAtividadeAnteriorInvalida] = useState(false);
 
     const [discSolicitada, setDiscSolicitada] = useState('');
     const [discSolicitadaInvalida, setdiscSolicitadaInvalida] = useState(false);
@@ -24,92 +23,100 @@ export default function CertificacaoConhecimentosForm() {
     const [anexosInvalidos, setAnexosInvalidos] = useState(false);
     
     const [showModal, setShowModal] = useState(false);
+    const [alert, setAlert] = useState(null);    
     const [requisicao, setRequisicao] = useState(null);
-
-    const [disciplinas, setDisciplinas] = useState({});
-    const [anexosRecive, setAnexosRecive] = useState([]);
 
     useEffect(() => setCursoInvalido(false), [curso]);
     useEffect(() => setdiscSolicitadaInvalida(false), [discSolicitada]);
-    useEffect(() => setdiscCursadaAntesInvalida(false), [discCursadaAntes]);
+    useEffect(() => setFormacaoAtividadeAnteriorInvalida(false), [formacaoAtividadeAnterior]);
     useEffect(() => setAnexosInvalidos(false), [anexos]);
     useEffect(() => setShowModal(true), [requisicao]);
 
-    useEffect(() => setDisciplinas(getDisciplinas(curso)), [curso]);
-
     const camposInvalidos = () => {
         if(!curso) setCursoInvalido(true);
-        if(!discCursadaAntes) setdiscCursadaAntesInvalida(true);
+        if(!formacaoAtividadeAnterior) setFormacaoAtividadeAnteriorInvalida(true);
         if(!discSolicitada) setdiscSolicitadaInvalida(true);
-        if(!anexos.length) setAnexosInvalidos(true);
+        if(!anexos && !anexos.length) setAnexosInvalidos(true);
 
-        return ( !curso || !discCursadaAntes || !discSolicitada || !anexos.length );
+        return ( !curso || !formacaoAtividadeAnterior || !discSolicitada || !anexos.length );
     }
 
     const limparCampos = () => {
         setRequisicao(null);
-        setCurso(null);
-        setDiscSolicitada(null);
-        setDiscCursadaAntes('');
+        setCurso('');
+        setDiscSolicitada('');
+        setFormacaoAtividadeAnterior('');
         setAnexos([]);
-    }
-
-    const tratandoAnexos = () => {
-            let aux = ""; 
-        this.state.anexos.forEach(element => {
-            aux+=element.base64+ "@";
-        });
-
-        return aux;
     }
    
     const fazerRequisicao = async () => {
         if(camposInvalidos()) return;
-   
-        const requisicao = {
-            formacaoAtividadeAnterior: discCursadaAntes,
+        
+        setRequisicao({
+            formacaoAtividadeAnterior,
             tipo: "certificacao",
-            anexos: tratandoAnexos(),
+            anexos,
             disciplinaSolicitada: {
                 id: discSolicitada.value,
                 nome: discSolicitada.label, 
                 cargaHoraria: discSolicitada.carga, 
             }
+        });
+        setShowModal(true);
+    }
+
+    const enviarRequisicao = () => {
+        setShowModal(false);
+        
+        if(postRequisicao(requisicao)){
+            setAlert({
+                mensagem: 'Requisição enviada com sucesso!',
+                tipo: 'success'
+            });
+        } else {
+            setAlert({
+                mensagem: 'ATENÇÃO! Requisição não enviada!',
+                tipo: 'danger'
+            });
         }
-        const response = await postRequisicao(requisicao);
-        /* TODO - implementar retorno pro usuário */
-        console.log(response);
+
+        setTimeout(() => setAlert(null), 3000);
+        limparCampos();
     }
 
     return (
         <>
             <TituloPagina titulo={'Certificação de Conhecimentos'} />
             
-            <CursoInput 
+            {alert && <SACEAlert mensagem={alert.mensagem} tipo={alert.tipo} setAlert={setAlert}/>}
+
+            <CursoSelect
                 value={curso}
-                setCurso={setCurso} 
+                onChange={setCurso} 
                 onError={cursoInvalido} 
             />
 
-            <DisciplinaSolicitadaInput
+            <DisciplinaSolicitadaSelect
                 value={discSolicitada}
-                disciplinas={disciplinas}
-                setDiscSolicitada={setDiscSolicitada}
+                onChange={setDiscSolicitada}
                 disabled={!curso}
                 onError={discSolicitadaInvalida}
+                curso={curso}
             />
 
-            <DisciplinaCursadaAnteriorInput
-                value={discCursadaAntes}
-                setDiscCursadaAntes={setDiscCursadaAntes}
-                onError={discCursadaAntesInvalida}
+            <SACEInput
+                label={'Formação ou atividade exercida anteriormente'}
+                placeholder={'Preencha com o nome da formação ou atividade que você exerceu/exerce em outra instituição'}
+                onChange={({target}) => setFormacaoAtividadeAnterior(target.value)}
+                value={formacaoAtividadeAnterior}
+                setFormacaoAtividadeAnterior={setFormacaoAtividadeAnterior}
+                onError={formacaoAtividadeAnteriorInvalida}
+                onErrorMessage={'O campo formação ou atividade é obrigatório.'}
             />
 
             <AnexarArquivosInput
                 anexos={anexos}
                 setAnexos={setAnexos}
-                filesRecive={anexosRecive}
-                setFilesRecive={setAnexosRecive}
                 onError={anexosInvalidos}
             />
 
@@ -127,12 +134,11 @@ export default function CertificacaoConhecimentosForm() {
                 &&
                 <ModalConfirmarRequisicao 
                     requisicao={requisicao} 
-                    setShowModal={setShowModal} 
-                    showModal={showModal} 
-                    //enviarRequisicao={enviarRequisicao}
+                    setShowModal={setShowModal}
+                    showModal={showModal}
+                    enviarRequisicao={enviarRequisicao}
                 />
             }
         </>
     );
 }
-

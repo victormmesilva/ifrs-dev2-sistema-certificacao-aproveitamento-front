@@ -1,5 +1,5 @@
 import { Form } from 'react-bootstrap';
-import Requisicoes from '../pages/requisicoes/Requisicoes'
+//import Requisicoes from '../pages/requisicoes/Requisicoes'
 import Curso from '../Cursos/CursoView'
 import Disciplina from '../Disciplinas/DisciplinaView'
 import React, { Component } from 'react';
@@ -12,7 +12,7 @@ export default class DashBoard extends Component{
     
         this.state = {
          
-            telaSelecionada: ""
+            telaSelecionada: "/"
 
         }
 
@@ -34,6 +34,10 @@ export default class DashBoard extends Component{
     viewRequisicoes() {
       this.setState({telaSelecionada: "requisicao" });
     }
+/*
+  <button style={btnRequisicao} onClick={this.viewRequisicoes.bind(this)}  >Requisicões</button> 
+        <button onClick={this.viewCurso.bind(this)}  >Adicionar curso</button> 
+        <button style={btnCurso} onClick={this.viewDisciplina.bind(this)}  >Adicionar disciplina</button> 
 
     render() {
 
@@ -66,6 +70,13 @@ export default class DashBoard extends Component{
         {this.state.telaSelecionada=="curso"?<Curso /> : ""} 
         {this.state.telaSelecionada=="disciplina"?<Disciplina /> : ""} 
 
+*/
+    render() {
+      return(
+       <div className="container">
+
+
+  
        </div>
       );
     }
