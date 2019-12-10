@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../enviroment';
-import { token } from './axios';
+import { getToken } from './TokenService';
 
 const postRequisicao = async (requisicao) => {
     if(!requisicao) return;
@@ -11,10 +11,10 @@ const postRequisicao = async (requisicao) => {
         const response = await axios.post(URL, requisicao, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${getToken()}`,
             },
             params: {
-                token: token,
+                token: getToken(),
             },
         });
         
@@ -26,16 +26,15 @@ const postRequisicao = async (requisicao) => {
 
 const getAproveitamentos = async () => {
     const URL = `${baseURL}/requisicoes/aproveitamento/`;
-    console.log(URL);    
 
     try {
         const response = await axios.get(URL, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${getToken()}`,
             },
             params: {
-                token: token,
+                token: getToken(),
             },
         });
 
@@ -52,10 +51,10 @@ const getCertificacoes = async () => {
         const response = await axios.get(URL, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${getToken()}`,
             },
             params: {
-                token: token,
+                token: getToken(),
             },
         });
         

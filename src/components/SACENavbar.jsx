@@ -1,6 +1,7 @@
 import React from 'react';
-import { Navbar, Nav} from 'react-bootstrap';
+import { Navbar, Nav, Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import { logout } from '../services/TokenService';
 
 function SACELink({ to, label }) {
     return (
@@ -16,7 +17,7 @@ function SACELink({ to, label }) {
     );
 } 
 
-export default function SACENavbar() {
+export default function SACENavbar({ setUserData }) {
     return (
         <Navbar bg="light" expand="lg">
             <Link to={'/'}>
@@ -25,12 +26,22 @@ export default function SACENavbar() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <SACELink to={'/'} label={'Início'}/>
                     <SACELink to={'/minhas-requisicoes'} label={'Minhas requisições'}/>
                     <SACELink to={'/nova-requisicao'} label={'Nova requisição'}/>
-                    <SACELink to={'/listar-cursos'} label={' Listar cursos'}/>
+                    <SACELink to={'/cadastro-curso'} label={'Cadastrar curso'}/>
+                    {/* <SACELink to={'/cadastro-disciplina'} label={'Cadastrar disciplina'}/> */}
                 </Nav>
             </Navbar.Collapse>
+            <Link to={'/'}>
+                <Button 
+                    onClick={() => {
+                        logout();
+                        setUserData(null);
+                    }}
+                >
+                    Logout
+                </Button>
+            </Link>
         </Navbar>
     );
 }

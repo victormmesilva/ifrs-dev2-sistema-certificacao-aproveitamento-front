@@ -6,7 +6,7 @@ import './tabelarequisicoes.css';
 
 export default function() {
     const [requisicoes, setRequisicoes] = useState([]);
-    const [alert, setAlert] = useState('');
+    const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -17,10 +17,7 @@ export default function() {
           setIsLoading(false);
         })
         .catch(error => {
-          setAlert({
-            mensagem: error.message,
-            tipo: 'danger',
-          });
+          setError(error);
           setIsLoading(false);
         });
     }, []);
@@ -28,7 +25,7 @@ export default function() {
     return (
       <>
         <h6>Lista de requisições de certificação de estudos</h6>
-        {alert && <Alert variant={alert.tipo}>{alert.mensagem}</Alert>}
+        {error && <Alert variant="danger">Não foi possível carregar suas requisições.</Alert>}
           {
             isLoading 
             ? 

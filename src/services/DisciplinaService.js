@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { baseURL } from '../enviroment';
-import { token } from './axios';
+import { getToken } from './TokenService';
 
 const getDisciplinas = async (curso) => {
     const URL = `${baseURL}/cursos/${curso.value}/disciplinas`; 
@@ -8,10 +8,10 @@ const getDisciplinas = async (curso) => {
         const disciplinas = await axios.get(URL, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${getToken()}`,
             },
             params: {
-                token: token,
+                token: getToken(),
             },
         });
 

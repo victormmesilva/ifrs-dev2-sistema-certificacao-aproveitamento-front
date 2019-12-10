@@ -2,7 +2,6 @@ import React from 'react';
 import './card.css';
 
 export default function CardAproveitamento(req) {
-  console.log(req);  
   const { 
     id, tipo, dataRequisicao,/*  curso, */ disciplinaSolicitada, deferido,
     disciplinasCursadasAnterior, parecer,
